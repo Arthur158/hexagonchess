@@ -1,6 +1,6 @@
 body {
     background-image: url("images/game_bg.png");
-    background-color: #a9abc6;
+    background-color: #e8e8e8;
 
     font-family: Montserrat, sans-serif;
     font-family: 1.4em;
@@ -30,7 +30,7 @@ body {
 }
 
 #timer2 img {
-    filter: invert();
+    filter:invert(0.6);
 }
 
 #forfeitBtn {
@@ -50,12 +50,32 @@ body {
 
 #board {
     position: absolute;
-    left: 0;
-    top: 10%;
+    left: 2.5%;
+    top: 15%;
+
+    height: 80%;
+    width: 50%;
 }
 
 #board img {
     height: 900px;
+    z-index: 1;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+}
+
+#board span {
+    z-index: 10;
+    cursor: pointer;
+
+    position: absolute;
+
+    height: 60px;
+    width: 60px;
 }
 
 #stats {
