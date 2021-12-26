@@ -1,0 +1,85 @@
+body {
+    background-image: url("images/game_bg.png");
+    background-color: #a9abc6;
+
+    font-family: Montserrat, sans-serif;
+    font-family: 1.4em;
+}
+
+.timer {
+    height: 50px;
+    width: 250px;
+
+    color: black;
+    font-size: 3em;
+
+    position: absolute;
+    left: 30%;
+}
+
+.timer img {
+    height: 50px;
+}
+
+#timer1 {
+    top: 25%;
+}
+
+#timer2 {
+    bottom: 25%;
+}
+
+#timer2 img {
+    filter: invert();
+}
+
+#forfeitBtn {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+
+    height: 50px;
+    width: 250px;
+
+    background-color: #322783;
+    color: white;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 2em;
+}
+
+#board {
+    position: absolute;
+    left: 0;
+    top: 10%;
+}
+
+#board img {
+    height: 900px;
+}
+
+#stats {
+    position: absolute;
+    right: 0;
+    top: 10%;
+
+    height: 80%;
+    width: 50%;
+}
+
+#message {
+    position: absolute;
+
+    bottom: 0;
+    left: 30%;
+
+    color: black;
+    font-size: 4em;
+}
+
+#gameTitle {
+    font-family: Nemoy, sans-serif; 
+    text-align: left;
+    padding-left: 30px; 
+    font-size: 3em;
+}

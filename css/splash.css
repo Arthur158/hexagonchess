@@ -1,0 +1,22 @@
+body {
+    background-image: url("images/splash_bg.png");
+    background-color: #a9abc6;
+
+    font-family: Montserrat, sans-serif;
+    font-family: 1.4em;
+}
+
+#splashTitle {
+    font-family: Nemoy, sans-serif; 
+    text-align: center; 
+    font-size: 5em;
+}
+
+#playBtn {
+    position: absolute;
+    bottom: 20%;
+    right: 20%;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 2em;
+}
