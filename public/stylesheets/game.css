@@ -59,13 +59,12 @@ body {
 
 #board img {
     height: 900px;
+    width: 1024px;
     z-index: 1;
 
     position: absolute;
-    top: 50%;
-    left: 50%;
-
-    transform: translate(-50%, -50%);
+    bottom: 0;
+    left: 0;
 }
 
 #board span {

@@ -1,0 +1,8 @@
+{
+    "settings": {
+        "css.validate": false,
+        "html.validate.styles": false,
+        "less.validate": false,
+        "scss.validate": false
+    }
+}

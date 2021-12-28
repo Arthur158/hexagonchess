@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="stylesheets/game.css">
+
+        <title>Delft Hexagon Chess - Play</title>
+    </head>
+    <body>
+        <h1 id="gameTitle">HEXAGON CHESS</h1>
+        <button id="forfeitBtn" type="submit">FORFEIT</button>
+        <section id="board">
+            <img src="images/board2.png" alt="board">
+
+            <% 
+            let leftOffset = 485;
+            let bottomOffset = 60;
+            let verticalIncrease = 73;
+            let horizontalIncrease = 63.7;
+
+            for(let i = 0; i < 11; i++) {
+                for(let j = 1; j < Math.min(6, 11 - i); j++) {
+                    %>
+                        <span style="background-image: url(''); background-size: cover; left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px"></span>
+                    <%
+                }  
+                for(let k = 1; k < Math.min(6, 11 - i); k++) {
+                    %>
+                        <span style="background-image: url(''); background-size: cover; left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px"></span>
+                    <%
+                }  
+                
+                // This is the middle file (F)
+                %>
+                    <span style="background-image: url(''); background-size: cover; left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px"></span>
+                <%
+            }
+            %>
+        </section>
+        <section id="stats">
+            <div id="timer1" class="timer">
+                <img src="images/stopwatch.png" alt="sw1" id="sw1">
+                <span id="stopwatch1">00:00</span>
+            </div>
+            
+            <div id="timer2" class="timer">
+                <img src="images/stopwatch.png" alt="sw2" id="sw2">
+                <span id="stopwatch2">00:00</span>
+            </div>
+
+            <span id="message">Waiting...</span>
+        </section>
+    </body>
+</html>
