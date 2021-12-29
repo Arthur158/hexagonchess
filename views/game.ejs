@@ -24,18 +24,18 @@
             for(let i = 0; i < 11; i++) {
                 for(let j = 1; j < Math.min(6, 11 - i); j++) {
                     %>
-                        <span class="cell" style="background-image: url('images/pieces/pawn.png'); background-size: cover; left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px"></span>
+                        <span class="cell" style="left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px"></span>
                     <%
                 }
                 for(let k = 1; k < Math.min(6, 11 - i); k++) {
                     %>
-                        <span class="cell" style="background-image: url('images/pieces/pawn.png'); background-size: cover; left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px"></span>
+                        <span class="cell" style="left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px"></span>
                     <%
                 }  
                 
                 // This is the middle file (F)
                 %>
-                    <span class="cell" style="background-image: url('images/pieces/pawn.png'); background-size: cover; left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px" title="{'x': 2, 'y':1, 'z':7}"></span>
+                    <span class="cell" style="left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px" title="{'x': 2, 'y':1, 'z':7}"></span>
                 <%
             }
             %>
@@ -54,6 +54,8 @@
             <span id="message">Waiting...</span>
         </section>
 
-        <script ></script>
+        <script src="javascripts/config.js"></script>
+        <script src="javascripts/statuses.js"></script>
+        <script src="javascripts/messages.js"></script>
     </body>
 </html>
