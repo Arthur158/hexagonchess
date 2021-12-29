@@ -1,207 +1,178 @@
 /* eslint-disable no-undef */
-//@ts-check
+//@ts-nocheck
 
 const clickSound = new Audio("../data/click.wav");
 
 /**
- * Game state object
- * @param {*} visibleWordBoard
- * @param {*} sb
- * @param {*} socket
+ * GameHandler object
+ * 
+ * @param {VisibleGameBoard} hexagonalBoard 
+ * @param {TimerBar} timerBar 
+ * @param {StatusBar} statusBar 
+ * @param {*} currentTurn 
+ * @param {WebSocket} socket 
  */
-function GameState(visibleWordBoard, sb, socket) {
+function GameHandler(initialGameState, hexagonalBoard, timerBar, statusBar, currentTurn, socket) {
   this.playerType = null;
-  this.MAX_ALLOWED = Setup.MAX_ALLOWED_GUESSES;
-  this.wrongGuesses = 0;
-  this.visibleWordArray = null;
-  this.alphabet = new Alphabet();
-  this.alphabet.initialize();
-  this.visibleWordBoard = visibleWordBoard;
-  this.targetWord = null;
-  this.statusBar = sb;
+  this.gameState = initialGameState;
+  this.visibleGameBoard = hexagonalBoard;
+  this.timerBar = timerBar;
+  this.statusBar = statusBar;
   this.socket = socket;
 }
 
 /**
- * Initializes the word array.
+ * Initializes the board with starting positions.
  */
-GameState.prototype.initializeVisibleWordArray = function () {
-  this.visibleWordArray = new Array(this.targetWord.length);
-  this.visibleWordArray.fill(Setup.HIDDEN_CHAR);
+GameHandler.prototype.initializeBoard = function () {
+  this.visibleGameBoard.initializeStartingPositions();
 };
 
 /**
  * Retrieve the player type.
- * @returns {string} player type
+ * @returns {PlayerType} player type
  */
-GameState.prototype.getPlayerType = function () {
+GameHandler.prototype.getPlayerType = function () {
   return this.playerType;
 };
 
 /**
  * Set the player type.
- * @param {string} p player type to set
+ * @param {PlayerType} p player type to set
  */
-GameState.prototype.setPlayerType = function (p) {
+GameHandler.prototype.setPlayerType = function (p) {
   this.playerType = p;
 };
 
 /**
- * Set the word to guess.
- * @param {string} w word to set
+ * Returns the player type based on current turn
+ * 
+ * @returns {PlayerType} player type
  */
-GameState.prototype.setTargetWord = function (w) {
-  this.targetWord = w;
+GameHandler.prototype.getTurnPlayerType = function() {
+  return this.gameState.turn % 2 == 0 ? PlayerType.WHITE : PlayerType.BLACK;
+}
+
+/**
+ * Update the game state given the cell that was just clicked.
+ * @param {Position} p1
+ */
+GameHandler.prototype.updateGame = function (p1) {
+
+  // TODO
+
+  // const res = this.alphabet.getLetterInWordIndices(
+  //   clickedLetter,
+  //   this.targetWord
+  // );
+
+  // //wrong guess
+  // if (res.length == 0) {
+  //   this.incrWrongGuess();
+  // } else {
+  //   this.revealLetters(clickedLetter, res);
+  // }
+
+  // this.alphabet.makeLetterUnAvailable(clickedLetter);
+  // this.visibleWordBoard.setWord(this.visibleWordArray);
+
+  // const outgoingMsg = Messages.O_MAKE_A_GUESS;
+  // outgoingMsg.data = clickedLetter;
+  // this.socket.send(JSON.stringify(outgoingMsg));
+
+  // //is the game complete?
+  // const winner = this.whoWon();
+
+  // if (winner != null) {
+  //   this.revealAll();
+
+  //   /* disable further clicks by cloning each alphabet
+  //    * letter and not adding an event listener; then
+  //    * replace the original node through some DOM logic
+  //    */
+  //   const elements = document.querySelectorAll(".letter");
+  //   Array.from(elements).forEach(function (el) {
+  //     // @ts-ignore
+  //     el.style.pointerEvents = "none";
+  //   });
+
+  //   let alertString;
+  //   if (winner == this.playerType) {
+  //     alertString = Status["gameWon"];
+  //   } else {
+  //     alertString = Status["gameLost"];
+  //   }
+  //   alertString += Status["playAgain"];
+  //   this.statusBar.setStatus(alertString);
+
+  //   //player B sends final message
+  //   if (this.playerType == "B") {
+  //     let finalMsg = Messages.O_GAME_WON_BY;
+  //     finalMsg.data = winner;
+  //     this.socket.send(JSON.stringify(finalMsg));
+  //   }
+  //   this.socket.close();
+  // }
 };
 
 /**
- * Retrieve the word array.
- * @returns {string[]} array of letters
+ * Initialize the hexagonal board.
+ * @param {GameHandler} gs
  */
-GameState.prototype.getVisibleWordArray = function () {
-  return this.visibleWordArray;
-};
-
-/**
- * Increase the wrong-guess count.
- */
-GameState.prototype.incrWrongGuess = function () {
-  this.wrongGuesses++;
-
-  if (this.whoWon() == null) {
-    //hide a balloon
-    const id = "b" + this.wrongGuesses;
-    document.getElementById(id).className += " balloonGone";
-  }
-};
-
-/**
- * Check if anyone one won.
- * @returns {string|null} player who whon or null if there is no winner yet
- */
-GameState.prototype.whoWon = function () {
-  //too many wrong guesses? Player A (who set the word) won
-  if (this.wrongGuesses > Setup.MAX_ALLOWED_GUESSES) {
-    return "A";
-  }
-  //word solved? Player B won
-  if (this.visibleWordArray.indexOf(Setup.HIDDEN_CHAR) < 0) {
-    return "B";
-  }
-  return null; //nobody won yet
-};
-
-/**
- * Retrieve the positions of the given letter in the target word.
- * @param {string} letter
- * @param {number[]} indices
- */
-GameState.prototype.revealLetters = function (letter, indices) {
-  for (let i = 0; i < indices.length; i++) {
-    this.visibleWordArray[indices[i]] = letter;
-  }
-};
-
-/**
- * Reveal all letters.
- */
-GameState.prototype.revealAll = function () {
-  this.visibleWordBoard.setWord(this.targetWord);
-};
-
-/**
- * Update the game state given the letter that was just clicked.
- * @param {string} clickedLetter
- */
-GameState.prototype.updateGame = function (clickedLetter) {
-  const res = this.alphabet.getLetterInWordIndices(
-    clickedLetter,
-    this.targetWord
-  );
-
-  //wrong guess
-  if (res.length == 0) {
-    this.incrWrongGuess();
-  } else {
-    this.revealLetters(clickedLetter, res);
-  }
-
-  this.alphabet.makeLetterUnAvailable(clickedLetter);
-  this.visibleWordBoard.setWord(this.visibleWordArray);
-
-  const outgoingMsg = Messages.O_MAKE_A_GUESS;
-  outgoingMsg.data = clickedLetter;
-  this.socket.send(JSON.stringify(outgoingMsg));
-
-  //is the game complete?
-  const winner = this.whoWon();
-
-  if (winner != null) {
-    this.revealAll();
-
-    /* disable further clicks by cloning each alphabet
-     * letter and not adding an event listener; then
-     * replace the original node through some DOM logic
-     */
-    const elements = document.querySelectorAll(".letter");
-    Array.from(elements).forEach(function (el) {
-      // @ts-ignore
-      el.style.pointerEvents = "none";
-    });
-
-    let alertString;
-    if (winner == this.playerType) {
-      alertString = Status["gameWon"];
-    } else {
-      alertString = Status["gameLost"];
-    }
-    alertString += Status["playAgain"];
-    this.statusBar.setStatus(alertString);
-
-    //player B sends final message
-    if (this.playerType == "B") {
-      let finalMsg = Messages.O_GAME_WON_BY;
-      finalMsg.data = winner;
-      this.socket.send(JSON.stringify(finalMsg));
-    }
-    this.socket.close();
-  }
-};
-
-/**
- * Initialize the alphabet board.
- * @param {*} gs
- */
-function AlphabetBoard(gs) {
+function initializeGameBoard (gs) {
   //only initialize for player that should actually be able to use the board
   this.initialize = function () {
-    const elements = document.querySelectorAll(".letter");
+    const elements = document.querySelectorAll(".cell");
     Array.from(elements).forEach(function (el) {
       el.addEventListener("click", function singleClick(e) {
-        const clickedLetter = e.target["id"];
+        const clickedCell = e.target["id"];
         clickSound.play();
 
-        gs.updateGame(clickedLetter);
+        // FIX WITH A PARSE METHOD IN Position
+        let clickedPosition = JSON.parse(e.target["title"]);
 
-        /*
-         * every letter can only be clicked once;
-         * here we remove the event listener when a click happened
-         */
-        el.removeEventListener("click", singleClick, false);
+        gs.updateGame(clickedPosition);
       });
     });
   };
 }
 
 /**
- * Disable the alphabet buttons.
+ * Add a piece type (or remove one) at the respective position
+ * 
+ * @param {Position|null} position 
+ * @param {PieceType} pieceType 
  */
-function disableAlphabetButtons() {
-  const alphabet = document.getElementById("alphabet");
-  const letterDivs = alphabet.getElementsByTagName("div");
-  for (let i = 0; i < letterDivs.length; i++) {
-    letterDivs.item(i).className += " alphabetDisabled";
-  }
+function addPieceToCell(position, pieceType) {
+  const elements = document.querySelectorAll(".cell");
+  Array.from(elements).forEach(function (el) {
+    if(el.title === JSON.stringify(position)) {
+
+      el.className = "cell";
+
+      if(pieceType != null) {
+        el.className += " " + pieceType.toLowerCase();
+      }
+    }
+  });
+}
+
+/**
+ * Get the piece type from the position
+ * 
+ * @param {Position} position 
+ * @returns {PieceType|null} the piece on that position
+ */
+function getPieceFromCell(position) {
+  const elements = document.querySelectorAll(".cell");
+  let pieceType = null;
+  Array.from(elements).forEach(function (el) {
+    if(el.title === JSON.stringify(position)) {
+      pieceType = el.className.replace("cell ", "").toUpperCase();
+    }
+  });
+
+  return pieceType === "" ? null : PieceType[pieceType];
 }
 
 //set everything up, including the WebSocket
@@ -214,7 +185,7 @@ function disableAlphabetButtons() {
    * - status bar
    * - alphabet board
    *
-   * the GameState object coordinates everything
+   * the GameHandler object coordinates everything
    */
 
   // @ts-ignore
@@ -226,7 +197,7 @@ function disableAlphabetButtons() {
   // @ts-ignore
   createBalloons();
 
-  const gs = new GameState(vw, sb, socket);
+  const gs = new GameHandler(vw, sb, socket);
   const ab = new AlphabetBoard(gs);
 
   socket.onmessage = function (event) {
