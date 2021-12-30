@@ -48,7 +48,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
     let pieceEndingPosition=board.getPieceAtPosition(p2);
 
     //returns false if the piece is capturing a piece of its own colour
-    if(p2!=null&&p1[1]==p2[1]){
+    if(pieceEndingPosition!=null&&pieceStartingPosition[1]==pieceEndingPosition[1]){
         return false;
     }
     
@@ -115,7 +115,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
                     return true
                 }
             }
-        case PieceType.Pawn:
+        case PieceType.PAWN:
             if(pieceStartingPosition[1]==Color.WHITE){
                 if(vector.x==1&&vector.y==0&&vector.z==0){
                     if(pieceEndingPosition==null){
@@ -273,6 +273,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
                 return true;
             }  
         }
+        return false;
 }
 
 function otherPieceGetter(x,y,z){
