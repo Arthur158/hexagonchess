@@ -4,7 +4,8 @@
 const clickSound = new Audio("../data/click.wav");
 
 /**
- * GameHandler object
+ * GameHandler object that takes care of displaying the changes
+ * made by receiving a new GameState
  * 
  * @param {VisibleGameBoard} hexagonalBoard 
  * @param {TimerBar} timerBar 
@@ -12,108 +13,126 @@ const clickSound = new Audio("../data/click.wav");
  * @param {*} currentTurn 
  * @param {WebSocket} socket 
  */
-function GameHandler(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
-  this.playerType = null;
-  this.gameState = initialGameState;
-  this.visibleGameBoard = hexagonalBoard;
-  this.timerBar = timerBar;
-  this.statusBar = statusBar;
-  this.socket = socket;
+class GameHandler {
+  constructor(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
+    this.playerType = null;
+    this.gameState = initialGameState;
+    this.visibleGameBoard = hexagonalBoard;
+    this.timerBar = timerBar;
+    this.statusBar = statusBar;
+    this.socket = socket;
+
+    this.currentSelectedPosition = null;
+  }
+  /**
+   * Initializes the board with starting positions.
+   */
+  initializeBoard() {
+    this.visibleGameBoard.initializeStartingPositions();
+  }
+  /**
+   * Retrieve the player type.
+   * @returns {PlayerType} player type
+   */
+  getPlayerType() {
+    return this.playerType;
+  }
+  /**
+   * Set the player type.
+   * @param {PlayerType} p player type to set
+   */
+  setPlayerType(p) {
+    this.playerType = p;
+  }
+  /**
+   * Returns the player type based on current turn
+   *
+   * @returns {PlayerType} player type
+   */
+  getTurnPlayerType() {
+    return this.gameState.turn % 2 == 0 ? PlayerType.WHITE : PlayerType.BLACK;
+  }
+
+  /**
+   * Sets the current cell position selection
+   * 
+   * @param {Position} p 
+   */
+  setCurrentSelectedPosition(p) {
+    this.currentSelectedPosition = p;
+  }
+
+  /**
+   * Deselects the current cell
+   */
+  deselectPosition() {
+    this.currentSelectedPosition = null;
+  }
+
+  /**
+   * @returns {boolean} if there is a position selected
+   */
+  isPositionSelected() {
+    return this.currentSelectedPosition != null;
+  }
+
+  /**
+   * Update the game state given the cell that was just clicked.
+   * @param {Position} p1
+   */
+  updateGame(p1) {
+    // TODO
+
+    
+
+    // const res = this.alphabet.getLetterInWordIndices(
+    //   clickedLetter,
+    //   this.targetWord
+    // );
+    // //wrong guess
+    // if (res.length == 0) {
+    //   this.incrWrongGuess();
+    // } else {
+    //   this.revealLetters(clickedLetter, res);
+    // }
+    // this.alphabet.makeLetterUnAvailable(clickedLetter);
+    // this.visibleWordBoard.setWord(this.visibleWordArray);
+    // const outgoingMsg = Messages.O_MAKE_A_GUESS;
+    // outgoingMsg.data = clickedLetter;
+    // this.socket.send(JSON.stringify(outgoingMsg));
+    // //is the game complete?
+    // const winner = this.whoWon();
+    // if (winner != null) {
+    //   this.revealAll();
+    //   /* disable further clicks by cloning each alphabet
+    //    * letter and not adding an event listener; then
+    //    * replace the original node through some DOM logic
+    //    */
+    //   const elements = document.querySelectorAll(".letter");
+    //   Array.from(elements).forEach(function (el) {
+    //     // @ts-ignore
+    //     el.style.pointerEvents = "none";
+    //   });
+    //   let alertString;
+    //   if (winner == this.playerType) {
+    //     alertString = Status["gameWon"];
+    //   } else {
+    //     alertString = Status["gameLost"];
+    //   }
+    //   alertString += Status["playAgain"];
+    //   this.statusBar.setStatus(alertString);
+    //   //player B sends final message
+    //   if (this.playerType == "B") {
+    //     let finalMsg = Messages.O_GAME_WON_BY;
+    //     finalMsg.data = winner;
+    //     this.socket.send(JSON.stringify(finalMsg));
+    //   }
+    //   this.socket.close();
+    // }
+  }
 }
 
-/**
- * Initializes the board with starting positions.
- */
-GameHandler.prototype.initializeBoard = function () {
-  this.visibleGameBoard.initializeStartingPositions();
-};
 
-/**
- * Retrieve the player type.
- * @returns {PlayerType} player type
- */
-GameHandler.prototype.getPlayerType = function () {
-  return this.playerType;
-};
-
-/**
- * Set the player type.
- * @param {PlayerType} p player type to set
- */
-GameHandler.prototype.setPlayerType = function (p) {
-  this.playerType = p;
-};
-
-/**
- * Returns the player type based on current turn
- * 
- * @returns {PlayerType} player type
- */
-GameHandler.prototype.getTurnPlayerType = function() {
-  return this.gameState.turn % 2 == 0 ? PlayerType.WHITE : PlayerType.BLACK;
-}
-
-/**
- * Update the game state given the cell that was just clicked.
- * @param {Position} p1
- */
-GameHandler.prototype.updateGame = function (p1) {
-
-  // TODO
-
-  // const res = this.alphabet.getLetterInWordIndices(
-  //   clickedLetter,
-  //   this.targetWord
-  // );
-
-  // //wrong guess
-  // if (res.length == 0) {
-  //   this.incrWrongGuess();
-  // } else {
-  //   this.revealLetters(clickedLetter, res);
-  // }
-
-  // this.alphabet.makeLetterUnAvailable(clickedLetter);
-  // this.visibleWordBoard.setWord(this.visibleWordArray);
-
-  // const outgoingMsg = Messages.O_MAKE_A_GUESS;
-  // outgoingMsg.data = clickedLetter;
-  // this.socket.send(JSON.stringify(outgoingMsg));
-
-  // //is the game complete?
-  // const winner = this.whoWon();
-
-  // if (winner != null) {
-  //   this.revealAll();
-
-  //   /* disable further clicks by cloning each alphabet
-  //    * letter and not adding an event listener; then
-  //    * replace the original node through some DOM logic
-  //    */
-  //   const elements = document.querySelectorAll(".letter");
-  //   Array.from(elements).forEach(function (el) {
-  //     // @ts-ignore
-  //     el.style.pointerEvents = "none";
-  //   });
-
-  //   let alertString;
-  //   if (winner == this.playerType) {
-  //     alertString = Status["gameWon"];
-  //   } else {
-  //     alertString = Status["gameLost"];
-  //   }
-  //   alertString += Status["playAgain"];
-  //   this.statusBar.setStatus(alertString);
-
-  //   //player B sends final message
-  //   if (this.playerType == "B") {
-  //     let finalMsg = Messages.O_GAME_WON_BY;
-  //     finalMsg.data = winner;
-  //     this.socket.send(JSON.stringify(finalMsg));
-  //   }
-  //   this.socket.close();
-  // }
-};
 
 //set everything up, including the WebSocket
 (function setup() {
