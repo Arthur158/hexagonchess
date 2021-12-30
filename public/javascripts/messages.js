@@ -28,15 +28,23 @@
   };
   exports.S_PLAYER_BLACK = JSON.stringify(exports.O_PLAYER_BLACK);
 
+  /**
+   * Server to players, containing game data
+   */
+  exports.T_GAME_DATA = "GAME-DATA";
+  exports.O_GAME_DATA = {
+    type: exports.T_GAME_DATA,
+    data: null,
+  };
+
   /*
-   * BLACK or WHITE to server or server to BLACK or WHITE
+   * server to BLACK or WHITE
    */
   exports.T_MAKE_A_MOVE = "MAKE-A-MOVE";
   exports.O_MAKE_A_MOVE = {
     type: exports.T_MAKE_A_MOVE,
-    data: null,
   };
-  //exports.S_MAKE_A_MOVE does not exist, as data needs to be set
+  exports.S_MAKE_A_MOVE = JSON.stringify(exports.O_MAKE_A_MOVE);
 
   /*
    * server to BLACK or WHITE
@@ -48,6 +56,18 @@
   }
   //exports.S_ILLEGAL_MOVE does not exist, as data neets to be set
 
+  /**
+   * server to BLACK or WHITE
+   */
+  exports.T_WAIT_FOR_TURN = "WAIT-FOR-TURN";
+  exports.O_WAIT_FOR_TURN = {
+    type: exports.T_WAIT_FOR_TURN
+  }
+  exports.S_WAIT_FOR_TURN = JSON.stringify(exports.O_WAIT_FOR_TURN);
+
+  /**
+   * server to BLACK or WHITE
+   */
   exports.T_REGISTERED_MOVE = "REGISTERED-MOVE";
   exports.O_REGISTERED_MOVE = {
     type: exports.T_REGISTERED_MOVE
@@ -62,5 +82,16 @@
     type: exports.T_GAME_OVER,
     data: null,
   };
+
+  /**
+   * Players to server
+   */  
+  exports.T_MADE_MOVE = "MADE-MOVE";
+  exports.O_MADE_MOVE = {
+    type: exports.T_MADE_MOVE,
+    data: null,
+  }
+  //exports.S_MADE_MOVE does not exist, as data neets to be set
+
 })(typeof exports === "undefined" ? (this.Messages = {}) : exports);
 //if exports is undefined, we are on the client; else the server

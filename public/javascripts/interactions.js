@@ -12,7 +12,7 @@ const clickSound = new Audio("../data/click.wav");
  * @param {*} currentTurn 
  * @param {WebSocket} socket 
  */
-function GameHandler(initialGameState, hexagonalBoard, timerBar, statusBar, currentTurn, socket) {
+function GameHandler(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
   this.playerType = null;
   this.gameState = initialGameState;
   this.visibleGameBoard = hexagonalBoard;
@@ -115,66 +115,6 @@ GameHandler.prototype.updateGame = function (p1) {
   // }
 };
 
-/**
- * Initialize the hexagonal board.
- * @param {GameHandler} gs
- */
-function initializeGameBoard (gs) {
-  //only initialize for player that should actually be able to use the board
-  this.initialize = function () {
-    const elements = document.querySelectorAll(".cell");
-    Array.from(elements).forEach(function (el) {
-      el.addEventListener("click", function singleClick(e) {
-        const clickedCell = e.target["id"];
-        clickSound.play();
-
-        // FIX WITH A PARSE METHOD IN Position
-        let clickedPosition = JSON.parse(e.target["title"]);
-
-        gs.updateGame(clickedPosition);
-      });
-    });
-  };
-}
-
-/**
- * Add a piece type (or remove one) at the respective position
- * 
- * @param {Position|null} position 
- * @param {PieceType} pieceType 
- */
-function addPieceToCell(position, pieceType) {
-  const elements = document.querySelectorAll(".cell");
-  Array.from(elements).forEach(function (el) {
-    if(el.title === JSON.stringify(position)) {
-
-      el.className = "cell";
-
-      if(pieceType != null) {
-        el.className += " " + pieceType.toLowerCase();
-      }
-    }
-  });
-}
-
-/**
- * Get the piece type from the position
- * 
- * @param {Position} position 
- * @returns {PieceType|null} the piece on that position
- */
-function getPieceFromCell(position) {
-  const elements = document.querySelectorAll(".cell");
-  let pieceType = null;
-  Array.from(elements).forEach(function (el) {
-    if(el.title === JSON.stringify(position)) {
-      pieceType = el.className.replace("cell ", "").toUpperCase();
-    }
-  });
-
-  return pieceType === "" ? null : PieceType[pieceType];
-}
-
 //set everything up, including the WebSocket
 (function setup() {
   const socket = new WebSocket(Setup.WEB_SOCKET_URL);
@@ -188,27 +128,24 @@ function getPieceFromCell(position) {
    * the GameHandler object coordinates everything
    */
 
-  // @ts-ignore
-  const vw = new VisibleWordBoard();
-  // @ts-ignore
+  const gs = new GameState();
+  gs.initialize();
+
+  const vgb = new VisibleGameBoard();
   const sb = new StatusBar();
+  const tb = new TimerBar();
 
-  //no object, just a function
-  // @ts-ignore
-  createBalloons();
-
-  const gs = new GameHandler(vw, sb, socket);
-  const ab = new AlphabetBoard(gs);
+  const gh = new GameHandler(gs, vgb, tb, sb, socket);
 
   socket.onmessage = function (event) {
     let incomingMsg = JSON.parse(event.data);
 
     //set player type
     if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
-      gs.setPlayerType(incomingMsg.data); //should be "A" or "B"
+      gh.setPlayerType(incomingMsg.data); //should be "A" or "B"
 
       //if player type is A, (1) pick a word, and (2) sent it to the server
-      if (gs.getPlayerType() == "A") {
+      if (gh.getPlayerType() == "A") {
         disableAlphabetButtons();
 
         sb.setStatus(Status["player1Intro"]);
@@ -248,9 +185,9 @@ function getPieceFromCell(position) {
           }
         }
         sb.setStatus(Status["chosen"] + res);
-        gs.setTargetWord(res);
-        gs.initializeVisibleWordArray(); // initialize the word array, now that we have the word
-        vw.setWord(gs.getVisibleWordArray());
+        gh.setTargetWord(res);
+        gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
+        vw.setWord(gh.getVisibleWordArray());
 
         let outgoingMsg = Messages.O_TARGET_WORD;
         outgoingMsg.data = res;
@@ -263,23 +200,23 @@ function getPieceFromCell(position) {
     //Player B: wait for target word and then start guessing ...
     if (
       incomingMsg.type == Messages.T_TARGET_WORD &&
-      gs.getPlayerType() == "B"
+      gh.getPlayerType() == "B"
     ) {
-      gs.setTargetWord(incomingMsg.data);
+      gh.setTargetWord(incomingMsg.data);
 
       sb.setStatus(Status["player2Intro"]);
-      gs.initializeVisibleWordArray(); // initialize the word array, now that we have the word
+      gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
       ab.initialize();
-      vw.setWord(gs.getVisibleWordArray());
+      vw.setWord(gh.getVisibleWordArray());
     }
 
     //Player A: wait for guesses and update the board ...
     if (
       incomingMsg.type == Messages.T_MAKE_A_GUESS &&
-      gs.getPlayerType() == "A"
+      gh.getPlayerType() == "A"
     ) {
       sb.setStatus(Status["guessed"] + incomingMsg.data);
-      gs.updateGame(incomingMsg.data);
+      gh.updateGame(incomingMsg.data);
     }
   };
 
@@ -289,7 +226,7 @@ function getPieceFromCell(position) {
 
   //server sends a close event only if the game was aborted from some side
   socket.onclose = function () {
-    if (gs.whoWon() == null) {
+    if (gh.whoWon() == null) {
       sb.setStatus(Status["aborted"]);
     }
   };
