@@ -56,7 +56,7 @@ class PositionChecker {
      * @param {Position} p 
      * @returns {boolean} if p is on the field
      */
-    isPositionOnTheField(p) {
+    static isPositionOnTheField(p) {
         //TODO
     }
 
@@ -68,7 +68,7 @@ class PositionChecker {
      * @param {PieceType} pieceType
      * @param {Color} color
      */
-    checkPosition(p1, p2, board, pieceType, color) {
+    static checkPosition(p1, p2, board, pieceType, color) {
         let pieceStartingPosition = board.getPieceAtPosition(p1);
         let pieceEndingPosition = board.getPieceAtPosition(p2);
 

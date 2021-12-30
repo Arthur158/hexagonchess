@@ -83,7 +83,9 @@ class GameHandler {
   updateGame(p1) {
     // TODO
 
-    
+    if(PositionChecker.isPositionOnTheField(p1)) {
+        
+    }
 
     // const res = this.alphabet.getLetterInWordIndices(
     //   clickedLetter,
