@@ -1,5 +1,8 @@
-function StatusBar() {
-    this.setStatus = function(status) {
+class StatusBar {
+    constructor() {
+    }
+
+    setStatus(status) {
         document.getElementById("status").innerHTML = status;
     };
 }

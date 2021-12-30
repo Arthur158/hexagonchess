@@ -1,256 +1,248 @@
 /* eslint-disable no-undef */
-//@ts-nocheck
 
 const clickSound = new Audio("../data/click.wav");
 
 /**
  * GameHandler object that takes care of displaying the changes
  * made by receiving a new GameState
- * 
- * @param {VisibleGameBoard} hexagonalBoard 
- * @param {TimerBar} timerBar 
- * @param {StatusBar} statusBar 
- * @param {*} currentTurn 
- * @param {WebSocket} socket 
  */
 class GameHandler {
-  constructor(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
-    this.playerType = null;
-    this.gameState = initialGameState;
-    this.visibleGameBoard = hexagonalBoard;
-    this.timerBar = timerBar;
-    this.statusBar = statusBar;
-    this.socket = socket;
+    /**
+	 * @param {GameState} initialGameState
+	 * @param {VisibleGameBoard} hexagonalBoard 
+	 * @param {TimerBar} timerBar 
+	 * @param {StatusBar} statusBar 
+	 * @param {number} currentTurn 
+	 * @param {WebSocket} socket 
+	 */
+	constructor(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
+        this.playerType = null;
+        this.gameState = initialGameState;
+        this.visibleGameBoard = hexagonalBoard;
+        this.timerBar = timerBar;
+        this.statusBar = statusBar;
+        this.socket = socket;
 
-    this.currentSelectedPosition = null;
-  }
-  /**
+        this.currentSelectedPosition = null;
+    }
+    /**
    * Initializes the board with starting positions.
    */
-  initializeBoard() {
-    this.visibleGameBoard.initializeStartingPositions();
-  }
-  /**
+    initializeBoard() {
+        this.visibleGameBoard.initializeStartingPositions();
+    }
+    /**
    * Retrieve the player type.
    * @returns {PlayerType} player type
    */
-  getPlayerType() {
-    return this.playerType;
-  }
-  /**
+    getPlayerType() {
+        return this.playerType;
+    }
+    /**
    * Set the player type.
    * @param {PlayerType} p player type to set
    */
-  setPlayerType(p) {
-    this.playerType = p;
-  }
-  /**
+    setPlayerType(p) {
+        this.playerType = p;
+    }
+    /**
    * Returns the player type based on current turn
    *
    * @returns {PlayerType} player type
    */
-  getTurnPlayerType() {
-    return this.gameState.turn % 2 == 0 ? PlayerType.WHITE : PlayerType.BLACK;
-  }
+    getTurnPlayerType() {
+        return this.gameState.turn % 2 == 0 ? PlayerType.WHITE : PlayerType.BLACK;
+    }
 
-  /**
+    /**
    * Sets the current cell position selection
+   * and marks all possible moves of that piece on the board
    * 
    * @param {Position} p 
    */
-  setCurrentSelectedPosition(p) {
-    this.currentSelectedPosition = p;
-  }
+    setCurrentSelectedPosition(p) {
+        this.currentSelectedPosition = p;
+		this.visibleGameBoard.selectCell(p);
 
-  /**
-   * Deselects the current cell
-   */
-  deselectPosition() {
-    this.currentSelectedPosition = null;
-  }
+		this.visibleGameBoard.cells.forEach(function(el) {
+			let obj = JSON.parse(e.target["title"]);
+            let possibleMove = new Position(obj.x, obj.y, obj.z);
 
-  /**
-   * @returns {boolean} if there is a position selected
-   */
-  isPositionSelected() {
-    return this.currentSelectedPosition != null;
-  }
-
-  /**
-   * Update the game state given the cell that was just clicked.
-   * @param {Position} p1
-   */
-  updateGame(p1) {
-    // TODO
-
-    if(PositionChecker.isPositionOnTheField(p1)) {
-        
+			if(PositionChecker.checkPosition(p, possibleMove, this.gameState.gameBoard)) {
+				this.visibleGameBoard.makeCellAvailable(possibleMove);
+			}
+		});
     }
 
-    // const res = this.alphabet.getLetterInWordIndices(
-    //   clickedLetter,
-    //   this.targetWord
-    // );
-    // //wrong guess
-    // if (res.length == 0) {
-    //   this.incrWrongGuess();
-    // } else {
-    //   this.revealLetters(clickedLetter, res);
-    // }
-    // this.alphabet.makeLetterUnAvailable(clickedLetter);
-    // this.visibleWordBoard.setWord(this.visibleWordArray);
-    // const outgoingMsg = Messages.O_MAKE_A_GUESS;
-    // outgoingMsg.data = clickedLetter;
-    // this.socket.send(JSON.stringify(outgoingMsg));
-    // //is the game complete?
-    // const winner = this.whoWon();
-    // if (winner != null) {
-    //   this.revealAll();
-    //   /* disable further clicks by cloning each alphabet
-    //    * letter and not adding an event listener; then
-    //    * replace the original node through some DOM logic
-    //    */
-    //   const elements = document.querySelectorAll(".letter");
-    //   Array.from(elements).forEach(function (el) {
-    //     // @ts-ignore
-    //     el.style.pointerEvents = "none";
-    //   });
-    //   let alertString;
-    //   if (winner == this.playerType) {
-    //     alertString = Status["gameWon"];
-    //   } else {
-    //     alertString = Status["gameLost"];
-    //   }
-    //   alertString += Status["playAgain"];
-    //   this.statusBar.setStatus(alertString);
-    //   //player B sends final message
-    //   if (this.playerType == "B") {
-    //     let finalMsg = Messages.O_GAME_WON_BY;
-    //     finalMsg.data = winner;
-    //     this.socket.send(JSON.stringify(finalMsg));
-    //   }
-    //   this.socket.close();
-    // }
-  }
+    /**
+   * Deselects the current cell and makes the rest
+   * of the cells unavailable
+   */
+    deselectPosition() {
+        this.currentSelectedPosition = null;
+		this.visibleGameBoard.deselectAllCells();
+    }
+
+    /**
+   * @returns {boolean} if there is a position selected
+   */
+    isPositionSelected() {
+        return this.currentSelectedPosition != null;
+    }
+
+    /**
+   * Update the game state given the cell that was just clicked.
+   * @param {Position} p
+   */
+    updatePosition(p) {
+
+		// Check if the position is a valid one
+        if (!PositionChecker.isPositionOnTheField(p)) {
+			this.statusBar.setStatus(Status.notNice);
+            return;
+        }
+
+		// If the user has already selected a piece before, then send the new movement
+		if(this.isPositionSelected()) {
+			let previousPosition = this.currentSelectedPosition;
+			this.deselectPosition();
+
+			// If its the same position as before, just consider the piece deselected
+			if(previousPosition.equals(p)) return;
+
+			// If the move is invalid, print a message
+			if(!PositionChecker.checkPosition(previousPosition, p, this.gameState.gameBoard)) {
+				this.statusBar.setStatus(Status.invalidMove);
+				return;
+			}
+
+			// Move the piece to the desired position (even if it may be temporary)
+			let selectedPieceType = this.gameState.gameBoard.getPieceAtPosition(previousPosition)[0];
+			let selectedPieceColor = this.gameState.gameBoard.getPieceAtPosition(previousPosition)[1];
+
+			this.visibleGameBoard.addPieceToCell(previousPosition, null, null);
+			this.visibleGameBoard.addPieceToCell(p, selectedPieceType, selectedPieceColor);
+
+			// Send the movement to the server
+			let moveMsg = Messages.O_MADE_MOVE;
+			moveMsg.data = JSON.stringify({
+				p1: previousPosition, 
+				p2: p,
+			});
+
+			this.socket.send(JSON.stringify(moveMsg));
+
+			// Notify the user that we are waiting for the server to respond
+			this.statusBar.setStatus(Status.waitingServer);
+		}
+		// If not, select the clicked position
+		else {
+			this.setCurrentSelectedPosition(p);
+		}
+    }
+
+	updateBoard() {
+		let currentBoard = this.gameState.gameBoard;
+
+		this.visibleGameBoard.cells.forEach(function() {
+			let obj = JSON.parse(e.target["title"]);
+            let cellPosition = new Position(obj.x, obj.y, obj.z);
+
+			let boardCellPieceType = currentBoard.getPieceAtPosition(cellPosition)[0];
+			let boardCellPieceColor = currentBoard.getPieceAtPosition(cellPosition)[1];
+
+			this.visibleGameBoard.addPieceToCell(cellPosition, boardCellPieceType, boardCellPieceColor);
+		});
+	}
+
+	updateBarData() {
+		let whiteTime = this.gameState.whiteTime;
+		let blackTime = this.gameState.blackTime;
+
+		this.timerBar.setTimer(1, whiteTime);
+		this.timerBar.setTimer(2, blackTime);
+	}
 }
 
 
-
-//set everything up, including the WebSocket
+// set everything up, including the WebSocket
 (function setup() {
-  const socket = new WebSocket(Setup.WEB_SOCKET_URL);
+    const socket = new WebSocket(Setup.WEB_SOCKET_URL);
 
-  /*
+    /*
    * initialize all UI elements of the game:
-   * - visible word board (i.e. place where the hidden/unhidden word is shown)
+   * - visible game board (i.e the actual hexagons that represent the board)
    * - status bar
-   * - alphabet board
+   * - timer bar
    *
    * the GameHandler object coordinates everything
    */
 
-  const gs = new GameState();
-  gs.initialize();
+    const gs = new GameState();
+    gs.initialize();
 
-  const vgb = new VisibleGameBoard();
-  const sb = new StatusBar();
-  const tb = new TimerBar();
+    const vgb = new VisibleGameBoard();
+    const sb = new StatusBar();
+    const tb = new TimerBar();
 
-  const gh = new GameHandler(gs, vgb, tb, sb, socket);
+    const gh = new GameHandler(gs, vgb, tb, sb, socket);
 
-  socket.onmessage = function (event) {
-    let incomingMsg = JSON.parse(event.data);
+    socket.onmessage = function (event) {
+        let incomingMsg = JSON.parse(event.data);
 
-    //set player type
-    if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
-      gh.setPlayerType(incomingMsg.data); //should be "A" or "B"
+        // set player type
+        if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
+            gh.setPlayerType(incomingMsg.data);
+            // should be "WHITE" or "BLACK"
 
-      //if player type is A, (1) pick a word, and (2) sent it to the server
-      if (gh.getPlayerType() == "A") {
-        disableAlphabetButtons();
+			gh.initializeBoard();
+			vgb.disableAllCells();
+			tb.setTimer(1, 0);
+			tb.setTimer(2, 0);
+			sb.setStatus(Status.waitingOpponent);
 
-        sb.setStatus(Status["player1Intro"]);
-        let validWord = -1;
-        let promptString = Status["prompt"];
-        let res = null;
-
-        while (validWord < 0) {
-          res = prompt(promptString);
-
-          if (res == null) {
-            promptString = Status["prompt"];
-          } else {
-            res = res.toUpperCase(); //game is played with uppercase letters
-
-            if (
-              res.length < Setup.MIN_WORD_LENGTH ||
-              res.length > Setup.MAX_WORD_LENGTH
-            ) {
-              promptString = Status["promptAgainLength"];
-            } else if (/^[a-zA-Z]+$/.test(res) == false) {
-              promptString = Status["promptChars"];
-            }
-            //dictionary has only lowercase entries
-            //TODO: convert the dictionary to uppercase to avoid this extra string conversion cost
-            else if (
-              Object.prototype.hasOwnProperty.call(
-                // @ts-ignore
-                englishDict,
-                res.toLocaleLowerCase()
-              ) == false
-            ) {
-              promptString = Status["promptEnglish"];
-            } else {
-              validWord = 1;
-            }
-          }
+			if (gh.getPlayerType() == PlayerType.BLACK) {
+				// maybe invert board, dunno?
+			}
         }
-        sb.setStatus(Status["chosen"] + res);
-        gh.setTargetWord(res);
-        gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
-        vw.setWord(gh.getVisibleWordArray());
 
-        let outgoingMsg = Messages.O_TARGET_WORD;
-        outgoingMsg.data = res;
-        socket.send(JSON.stringify(outgoingMsg));
-      } else {
-        sb.setStatus(Status["player2IntroNoTargetYet"]);
-      }
-    }
+		// When we get new data from the server we override the existent game state
+		if (incomingMsg.type == Messages.T_GAME_DATA) {
+			let newState = JSON.parse(incomingMsg.data);
 
-    //Player B: wait for target word and then start guessing ...
-    if (
-      incomingMsg.type == Messages.T_TARGET_WORD &&
-      gh.getPlayerType() == "B"
-    ) {
-      gh.setTargetWord(incomingMsg.data);
+			gh.gameState.fromObj(newState);
 
-      sb.setStatus(Status["player2Intro"]);
-      gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
-      ab.initialize();
-      vw.setWord(gh.getVisibleWordArray());
-    }
+			gh.updateBarData();
+			gh.updateBoard();
+		}
 
-    //Player A: wait for guesses and update the board ...
-    if (
-      incomingMsg.type == Messages.T_MAKE_A_GUESS &&
-      gh.getPlayerType() == "A"
-    ) {
-      sb.setStatus(Status["guessed"] + incomingMsg.data);
-      gh.updateGame(incomingMsg.data);
-    }
-  };
+        // // Player B: wait for target word and then start guessing ...
+        // if (incomingMsg.type == Messages.T_TARGET_WORD && gh.getPlayerType() == "B") {
+        //     gh.setTargetWord(incomingMsg.data);
 
-  socket.onopen = function () {
-    socket.send("{}");
-  };
+        //     sb.setStatus(Status["player2Intro"]);
+        //     gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
+        //     ab.initialize();
+        //     vw.setWord(gh.getVisibleWordArray());
+        // }
 
-  //server sends a close event only if the game was aborted from some side
-  socket.onclose = function () {
-    if (gh.whoWon() == null) {
-      sb.setStatus(Status["aborted"]);
-    }
-  };
+        // // Player A: wait for guesses and update the board ...
+        // if (incomingMsg.type == Messages.T_MAKE_A_GUESS && gh.getPlayerType() == "A") {
+        //     sb.setStatus(Status["guessed"] + incomingMsg.data);
+        //     gh.updateGame(incomingMsg.data);
+        // }
+    };
 
-  socket.onerror = function () {};
-})(); //execute immediately
+    socket.onopen = function () {
+        socket.send("{}");
+    };
+
+    // server sends a close event only if the game was aborted from some side
+    socket.onclose = function () {
+        if (gh.winner == null) {
+            sb.setStatus(Status["aborted"]);
+        }
+    };
+
+    socket.onerror = function () {};
+})(); // execute immediately

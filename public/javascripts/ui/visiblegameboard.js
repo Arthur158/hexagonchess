@@ -26,10 +26,8 @@ class VisibleGameBoard {
     initializeCells(gameHandler) {
         this.cells.forEach(function (el) {
             el.addEventListener("click", function singleClick(e) {
-                // const clickedCell = e.target["id"];
-                // clickSound.play();
-                // // FIX WITH A PARSE METHOD IN Position
-                let clickedPosition = JSON.parse(e.target["title"]);
+                let obj = JSON.parse(e.target["title"]);
+                let clickedPosition = new Position(obj.x, obj.y, obj.z);
 
                 gameHandler.updateGame(clickedPosition);
             });
@@ -44,13 +42,12 @@ class VisibleGameBoard {
     /**
      * Add a piece type (or remove one) at the respective position
      *
-     * @param {Position|null} position
-     * @param {string} pieceType
-     * @param {string} color
+     * @param {Position} position
+     * @param {string|null} pieceType
+     * @param {string|null} color
      */
     addPieceToCell(position, pieceType, color) {
-        const elements = document.querySelectorAll(".cell");
-        Array.from(elements).forEach(function (el) {
+        this.cells.forEach(function (el) {
             if (el.getAttribute("title") === JSON.stringify(position)) {
 
                 el.className = "cell";
@@ -63,6 +60,55 @@ class VisibleGameBoard {
                     el.className += " black";
                 }
             }
+        });
+    }
+
+    /**
+     * Makes a certain cell selected
+     * 
+     * @param {Position} position 
+     */
+    selectCell(position) {
+        this.cells.forEach(function (el) {
+            if (el.getAttribute("title") === JSON.stringify(position)) {
+                el.className += " selected";
+            }
+        });
+    }
+
+    /**
+     * Makes a certain cell available
+     * 
+     * @param {Position} position 
+     */
+    makeCellAvailable(position) {
+        this.cells.forEach(function (el) {
+            if (el.getAttribute("title") === JSON.stringify(position)) {
+                el.className += " available";
+            }
+        });
+    }
+
+    /**
+     * Deselects all cells? complex
+     */
+    deselectAllCells() {
+        this.cells.forEach(function (el) {
+            if (el.className.includes(" selected")) {
+                el.className.replace(" selected", "");
+            }
+            if (el.className.includes(" available")) {
+                el.className.replace(" available", "");
+            }
+        });
+    }
+
+    /**
+     * Makes all cells unclickable
+     */
+    disableAllCells() {
+        this.cells.forEach(function(el) {
+            el.style.pointerEvents = "none";
         });
     }
 }

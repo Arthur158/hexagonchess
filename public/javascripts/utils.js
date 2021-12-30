@@ -44,6 +44,15 @@ class Position {
     setZ(z) {
         this.z = z;
     }
+
+    /**
+     * Checks if positions are equal
+     * 
+     * @param {Position} p 
+     */
+    equals(p) {
+        return this.x == p.x && this.y == p.y && this.z == p.z;
+    }
 }
 
 

@@ -1,5 +1,13 @@
-function TimerBar() {
-    this.setTimer = function(timerNumber, time) {
+class TimerBar {
+    constructor() {
+    }
+
+    /**
+     * 
+     * @param {number} timerNumber 
+     * @param {number} time 
+     */
+    setTimer(timerNumber, time) {
         //TODO
     };
 }
