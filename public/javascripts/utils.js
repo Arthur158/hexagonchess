@@ -124,7 +124,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
                 }
                 if(vector.x==2&&vector.y==0&&vector.z==0){
                     if(pieceEndingPosition==null){
-                        if(otherPieceGetter(p2.x-1,p2.y,p2.z)==null){
+                        if(otherPieceGetter(p2.x-1,p2.y,p2.z,board)==null){
                             if(p1.x==-1){                               //!!careful implementation
                                 return true;
                             }
@@ -145,7 +145,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
                 }
                 if(vector.x==-2&&vector.y==0&&vector.z==0){
                     if(pieceEndingPosition==null){
-                        if(otherPieceGetter(p2.x+1,p2.y,p2.z)==null){
+                        if(otherPieceGetter(p2.x+1,p2.y,p2.z,board)==null){
                             if(p1.x==1){                               //!!careful implementation
                                 return true;
                             }
@@ -162,7 +162,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.x==0){
                 if(Math.abs(vector.y)==Math.abs(vector.z)){
                     for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                     }
@@ -172,7 +172,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.y==0){
                 if(Math.abs(vector.x)==Math.abs(vector.z)){
                     for(var i=1;i<=Math.abs(vector.x);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                     }
@@ -183,7 +183,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.z==0){
                 if(Math.abs(vector.y)==Math.abs(vector.x)){
                     for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z,board)!=null){
                             return false;
                         }
                     }
@@ -194,7 +194,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
         case pieceType.ROOK:
             if(vector.x==0&&vector.y==0){
                 for(var i=1;i<=Math.abs(vector.z);i++){
-                        if(otherPieceGetter(p1.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                 }
@@ -202,7 +202,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             }
             if(vector.x==0&&vector.z==0){
                 for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z,board)!=null){
                             return false;
                         }
                 }
@@ -210,7 +210,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             }
             if(vector.y==0&&vector.z==0){
                 for(var i=1;i<=Math.abs(vector.x);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z,board)!=null){
                             return false;
                         }
                 }
@@ -220,7 +220,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.x==0){
                 if(Math.abs(vector.y)==Math.abs(vector.z)){
                     for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                     }
@@ -230,7 +230,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.y==0){
                 if(Math.abs(vector.x)==Math.abs(vector.z)){
                     for(var i=1;i<=Math.abs(vector.x);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                     }
@@ -241,7 +241,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             if(vector.z==0){
                 if(Math.abs(vector.y)==Math.abs(vector.x)){
                     for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z,board)!=null){
                             return false;
                         }
                     }
@@ -250,7 +250,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             }
             if(vector.x==0&&vector.y==0){
                 for(var i=1;i<=Math.abs(vector.z);i++){
-                        if(otherPieceGetter(p1.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y,p1.z+i*Math.abs(vector.z)/vector.z,board)!=null){
                             return false;
                         }
                 }
@@ -258,7 +258,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             }
             if(vector.x==0&&vector.z==0){
                 for(var i=1;i<=Math.abs(vector.y);i++){
-                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x,p1.y+i*Math.abs(vector.y)/vector.y,p1.z,board)!=null){
                             return false;
                         }
                 }
@@ -266,7 +266,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
             }
             if(vector.y==0&&vector.z==0){
                 for(var i=1;i<=Math.abs(vector.x);i++){
-                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z)!=null){
+                        if(otherPieceGetter(p1.x+i*Math.abs(vector.x)/vector.x,p1.y,p1.z,board)!=null){
                             return false;
                         }
                 }
@@ -276,7 +276,7 @@ PositionChecker.prototype.checkPosition = function(p1, p2, board, pieceType, col
         return false;
 }
 
-function otherPieceGetter(x,y,z){
+function otherPieceGetter(x,y,z,board){
     let position=new Position(x,y,z);
-    return getPieceAtPosition(position);
+    return board.getPieceAtPosition(position);
 }
