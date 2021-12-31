@@ -69,12 +69,52 @@ body {
 
 #board span {
     z-index: 10;
-    cursor: pointer;
+    cursor: default;
 
     position: absolute;
+    color: transparent;
 
     height: 60px;
     width: 60px;
+
+    background-size: cover;
+}
+
+#board .pawn, 
+#board .queen, 
+#board .rook,
+#board .king,
+#board .knight,
+#board .bishop {
+    cursor: pointer;
+}
+
+#board .pawn {
+    background-image: url('../images/pieces/pawn.png');
+}
+
+#board .king {
+    background-image: url('../images/pieces/king.png');
+}
+
+#board .queen {
+    background-image: url('../images/pieces/queen.png');
+}
+
+#board .rook {
+    background-image: url('../images/pieces/rook.png');
+}
+
+#board .knight {
+    background-image: url('../images/pieces/horse.png');
+}
+
+#board .bishop {
+    background-image: url('../images/pieces/bishop.png');
+}
+
+#board .black {
+    filter: invert(87%) sepia(23%) saturate(7421%) hue-rotate(231deg) brightness(109%) contrast(90%);
 }
 
 #stats {
