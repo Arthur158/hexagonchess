@@ -1,6 +1,8 @@
 //@ts-check
 
 const websocket = require("ws");
+const GameState = require("./public/javascripts/gamestate");
+const { PlayerType } = require("./public/javascripts/utils");
 
 /**
  * Game constructor. Every game has two players, identified by their WebSocket.
@@ -11,7 +13,8 @@ class game {
         this.playerWhite = null;
         this.playerBlack = null;
         this.id = gameID;
-        this.gameTransition = "0 JOINT"; //"A" means A won, "B" means B won, "ABORTED" means the game was aborted
+        this.gameData = new GameState();
+        this.gameState = "0 JOINT"; //"A" means A won, "B" means B won, "ABORTED" means the game was aborted
     }
     /**
      * Determines whether the transition from state `from` to `to` is valid.
@@ -49,43 +52,21 @@ class game {
      */
     setStatus(w) {
         if (game.prototype.isValidState(w) &&
-            game.prototype.isValidTransition(this.gameTransition, w)) {
-            this.gameTransition = w;
-            console.log("[STATUS] %s", this.gameTransition);
+            game.prototype.isValidTransition(this.gameState, w)) {
+            this.gameState = w;
+            console.log("[STATUS] %s", this.gameState);
         } else {
             return new Error(
-                `Impossible status change from ${this.gameTransition} to ${w}`
+                `Impossible status change from ${this.gameState} to ${w}`
             );
         }
-    }
-    /**
-     * Update the word to guess in this game.
-     * @param {string} w word to guess
-     * @returns
-     */
-    setWord(w) {
-        //two possible options for the current game state:
-        //1 JOINT, 2 JOINT
-        if (this.gameTransition != "1 JOINT" && this.gameTransition != "2 JOINT") {
-            return new Error(
-                `Trying to set word, but game status is ${this.gameTransition}`
-            );
-        }
-        this.wordToGuess = w;
-    }
-    /**
-     * Retrieves the word to guess.
-     * @returns {string} the word to guess
-     */
-    getWord() {
-        return this.wordToGuess;
     }
     /**
      * Checks whether the game is full.
      * @returns {boolean} returns true if the game is full (2 players), false otherwise
      */
     hasTwoConnectedPlayers() {
-        return this.gameTransition == "2 JOINT";
+        return this.gameState == "2 JOINT";
     }
     /**
      * Adds a player to the game. Returns an error if a player cannot be added to the current game.
@@ -93,9 +74,9 @@ class game {
      * @returns {(string|Error)} returns "A" or "B" depending on the player added; returns an error if that isn't possible
      */
     addPlayer(p) {
-        if (this.gameTransition != "0 JOINT" && this.gameTransition != "1 JOINT") {
+        if (this.gameState != "0 JOINT" && this.gameState != "1 JOINT") {
             return new Error(
-                `Invalid call to addPlayer, current state is ${this.gameTransition}`
+                `Invalid call to addPlayer, current state is ${this.gameState}`
             );
         }
 
@@ -104,12 +85,12 @@ class game {
             this.setStatus("2 JOINT");
         }
 
-        if (this.playerA == null) {
-            this.playerA = p;
-            return "A";
+        if (this.playerWhite == null) {
+            this.playerWhite = p;
+            return PlayerType.WHITE;
         } else {
-            this.playerB = p;
-            return "B";
+            this.playerBlack = p;
+            return PlayerType.BLACK;
         }
     }
 }

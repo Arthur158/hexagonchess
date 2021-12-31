@@ -1,7 +1,15 @@
+// @ts-check
+
+if(module){
+    const GameBoard = require("./gameboard");
+}
+
 const Color = {
     BLACK: 'BLACK',
     WHITE: 'WHITE'
 }
+
+const PlayerType = Color;
 
 const PieceType = {
     PAWN: 'PAWN',
@@ -24,16 +32,6 @@ class Position {
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-    /**
-     * Constructor that takes a object as parameter
-     * 
-     * @param {object} obj 
-     */
-    constructor(obj) {
-        this.x = obj.x;
-        this.y = obj.y;
-        this.z = obj.z;
     }
     setX(x) {
         this.x = x;
@@ -74,10 +72,11 @@ class PositionChecker {
      *
      * @param {Position} p1
      * @param {Position} p2
-     * @param {PieceType} pieceType
-     * @param {Color} color
+     * @param {GameBoard} board
+     * 
+     * @returns {boolean}
      */
-    static checkPosition(p1, p2, board, pieceType, color) {
+    static checkPosition(p1, p2, board) {
         let pieceStartingPosition = board.getPieceAtPosition(p1);
         let pieceEndingPosition = board.getPieceAtPosition(p2);
 
@@ -323,4 +322,12 @@ class PositionChecker {
 function otherPieceGetter(x, y, z) {
     let position = new Position(x, y, z);
     return getPieceAtPosition(position);
+}
+
+if(module) {
+    module.exports.Color = Color;
+    module.exports.PieceType = PieceType;
+    module.exports.PlayerType = PlayerType;
+    module.exports.Position = Position;
+    module.exports.PositionChecker = PositionChecker;
 }

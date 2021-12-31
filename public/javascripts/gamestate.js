@@ -1,11 +1,15 @@
 // @ts-nocheck
 
+if(module) {
+    const GameBoard = require("./gameboard");
+}
+
 /**
  * Class that contains the state of the game, including the board, the timers and the turn
  */
 class GameState {
     constructor(){
-        this.gameBoard = null;
+        this.gameBoard = new GameBoard();
         this.whiteTimer = 0;
         this.blackTimer = 0;
         this.turn = 0;
