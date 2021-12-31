@@ -134,6 +134,9 @@ class GameHandler {
 
 			// Notify the user that we are waiting for the server to respond
 			this.statusBar.setStatus(Status.waitingServer);
+
+			// Disable the cells after a move
+			this.visibleGameBoard.disableAllCells();
 		}
 		// If not, select the clicked position
 		else {
@@ -214,6 +217,21 @@ class GameHandler {
 
 			gh.updateBarData();
 			gh.updateBoard();
+		}
+
+		if (incomingMsg.type == Messages.T_MAKE_A_MOVE) {
+			vgb.enableAllCells();
+			sb.setStatus(Status.makeMove);
+		}
+
+		if (incomingMsg.type == Messages.T_ILLEGAL_MOVE) {
+			vgb.enableAllCells();
+			sb.setStatus(Status.invalidMove);
+		}
+
+		if (incomingMsg.type == Messages.T_WAIT_FOR_TURN) {
+			vgb.disableAllCells();
+			sb.setStatus(Status.waitingTurn);
 		}
 
         // // Player B: wait for target word and then start guessing ...

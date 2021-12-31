@@ -29,7 +29,7 @@ class VisibleGameBoard {
                 let obj = JSON.parse(e.target["title"]);
                 let clickedPosition = new Position(obj.x, obj.y, obj.z);
 
-                gameHandler.updateGame(clickedPosition);
+                gameHandler.updatePosition(clickedPosition);
             });
         });
     }
@@ -100,6 +100,15 @@ class VisibleGameBoard {
             if (el.className.includes(" available")) {
                 el.className.replace(" available", "");
             }
+        });
+    }
+
+    /**
+     * Makes all cells clickable
+     */
+    enableAllCells() {
+        this.cells.forEach(function(el) {
+            el.style.pointerEvents = "all";
         });
     }
 
