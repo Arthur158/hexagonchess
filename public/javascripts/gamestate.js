@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 if(module) {
-    const GameBoard = require("./gameboard");
+    const GameBoard = require("./gameboard.js");
 }
 
 /**
@@ -10,9 +10,14 @@ if(module) {
 class GameState {
     constructor(){
         this.gameBoard = new GameBoard();
+        this.gameBoard.initializeGlinski();
         this.whiteTimer = 0;
         this.blackTimer = 0;
         this.turn = 0;
+        this.losses = {
+            white: [],
+            black: [],
+        }
     }
 
     /**
@@ -30,6 +35,19 @@ class GameState {
      */
     fromObj(obj) {
         //TODO
+    }
+
+    performMove(p1, p2) {
+        let lostPiece = this.gameBoard.movePiece(p1, p2);
+
+        if(lostPiece != null) {
+            if(lostPiece[1] == "WHITE") {
+                this.losses.white.push(lostPiece[0]);
+            }
+            else {
+                this.losses.black.push(lostPiece[0]);
+            }
+        }
     }
 }
 

@@ -26,11 +26,18 @@ class GameBoard {
     }
 
     /**
+     * Function that initializes the board with the Glinski starting positions
+     */
+    initializeGlinski() {
+        //...
+    }
+
+    /**
      * Put the specified piece of color at the requested position on the board (does not do checking)
      * 
      * @param {Position} position 
-     * @param {PieceType} pieceType 
-     * @param {Color} color 
+     * @param {string} pieceType 
+     * @param {string} color 
      */
     setPieceAtPosition(position, pieceType, color) {
         let newCoords = GameBoard.fromPosition(position);
@@ -51,6 +58,30 @@ class GameBoard {
 
         if(cell.pieceType != null) return [cell.pieceType, cell.color];
     
+        return null;
+    }
+
+    /**
+     * Moves a piece from position p1 to position p2 
+     * and returns any overriden piece
+     * 
+     * @param {Position} p1 
+     * @param {Position} p2 
+     * 
+     * @returns {[string, string]|null}
+     */
+    movePiece(p1, p2) {
+        let piece = this.getPieceAtPosition(p1);
+
+        if(piece != null) {
+            let overriden = this.getPieceAtPosition(p2);
+
+            this.setPieceAtPosition(p1, null, null);
+            this.setPieceAtPosition(p2, piece[0], piece[1])
+
+            return overriden;
+        }
+
         return null;
     }
 

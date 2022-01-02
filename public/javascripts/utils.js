@@ -35,11 +35,26 @@ class Position {
     setZ(z) {
         this.z = z;
     }
+
+    static fromObj(obj) {
+        return new Position(obj.x, obj.y, obj.z);
+    }
 }
 
 
 class PositionChecker {
     constructor() {}
+
+    /**
+     * Checks if the provided position is actually on the board
+     * 
+     * @param {Position} position 
+     * @returns {boolean} 
+     */
+    static isPositionOnBoard(position) {
+        return true;
+    }
+
     /**
      * This method checks if a move from p1 to p2 is valid.
      *
@@ -47,7 +62,7 @@ class PositionChecker {
      * @param {Position} p2
      * @param {GameBoard} board
      */
-    checkPosition(p1, p2, board) { // board.getPieceAtPosition(Position) -> {PieceType, color} | null
+    static checkPosition(p1, p2, board) { // board.getPieceAtPosition(Position) -> {PieceType, color} | null
         let pieceStartingPosition = board.getPieceAtPosition(p1);
         let pieceEndingPosition = board.getPieceAtPosition(p2);
 
