@@ -1,7 +1,7 @@
 //@ts-check
 
 const websocket = require("ws");
-const GameState = require("./public/javascripts/gamestate");
+const { GameState } = require("./public/javascripts/gamestate");
 const { PlayerType } = require("./public/javascripts/utils");
 
 /**

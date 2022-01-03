@@ -21,21 +21,29 @@
             let verticalIncrease = 73;
             let horizontalIncrease = 63.7;
 
+            function toPosition(level, file) {
+                let x = level - 5;
+                let y = file > 5 ? file - 5 : 0;
+                let z = file < 5 ? 5 - file : 0;
+
+                return {x: x, y: y, z: z};
+            }
+
             for(let i = 0; i < 11; i++) {
                 for(let j = 1; j < Math.min(6, 11 - i); j++) {
                     %>
-                        <span class="cell" style="left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px"></span>
+                        <span class="cell" style="left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px" title="<%= JSON.stringify(toPosition(i, 5 - j)) %>"></span>
                     <%
                 }
                 for(let k = 1; k < Math.min(6, 11 - i); k++) {
                     %>
-                        <span class="cell" style="left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px"></span>
+                        <span class="cell" style="left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px" title="<%= JSON.stringify(toPosition(i, k + 5)) %>"></span>
                     <%
                 }  
                 
                 // This is the middle file (F)
                 %>
-                    <span class="cell" style="left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px" title="{'x': 2, 'y':1, 'z':7}"></span>
+                    <span class="cell" style="left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px" title="<%= JSON.stringify(toPosition(i, 5)) %>"></span>
                 <%
             }
             %>
@@ -57,5 +65,11 @@
         <script src="javascripts/config.js"></script>
         <script src="javascripts/statuses.js"></script>
         <script src="javascripts/messages.js"></script>
+        <script src="javascripts/gamestate.js"></script>
+        <script src="javascripts/utils.js"></script>
+        <script src="javascripts/ui/statusbar.js"></script>
+        <script src="javascripts/ui/timerbar.js"></script>
+        <script src="javascripts/ui/visiblegameboard.js"></script>
+        <script src="javascripts/interactions.js"></script>
     </body>
 </html>

@@ -1,8 +1,8 @@
-// @ts-check
+// @ts-nocheck
 
-if (module) {
-    const GameBoard = require("./gameboard");
-}
+// if(module) {
+//     const { GameBoard } = require("./gamestate");
+// }
 
 const Color = {
     BLACK: 'BLACK',
@@ -38,6 +38,21 @@ class Position {
 
     static fromObj(obj) {
         return new Position(obj.x, obj.y, obj.z);
+    }
+
+    /**
+     * Turns normal file/level coordinates into position coords
+     * 
+     * @param {number} file 
+     * @param {number} level 
+     * @returns 
+     */
+    static fromHexCoords(file, level) {
+        let x = level - 5;
+        let y = file > 5 ? file - 5 : 0;
+        let z = file < 5 ? 5 - file : 0;
+
+        return new Position(x, y, z);
     }
 }
 

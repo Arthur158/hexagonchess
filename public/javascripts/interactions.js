@@ -147,15 +147,25 @@ class GameHandler {
 	updateBoard() {
 		let currentBoard = this.gameState.gameBoard;
 
-		this.visibleGameBoard.cells.forEach(function() {
-			let obj = JSON.parse(e.target["title"]);
+        let vgb = this.visibleGameBoard;
+
+		this.visibleGameBoard.cells.forEach(function(e) {
+			let obj = JSON.parse(e.getAttribute("title"));
             let cellPosition = new Position(obj.x, obj.y, obj.z);
 
-			let boardCellPieceType = currentBoard.getPieceAtPosition(cellPosition)[0];
-			let boardCellPieceColor = currentBoard.getPieceAtPosition(cellPosition)[1];
+            let boardCellPiece = currentBoard.getPieceAtPosition(cellPosition);
 
-			this.visibleGameBoard.addPieceToCell(cellPosition, boardCellPieceType, boardCellPieceColor);
-		});
+            if(boardCellPiece != null) {
+                let boardCellPieceType = currentBoard.getPieceAtPosition(cellPosition)[0];
+                let boardCellPieceColor = currentBoard.getPieceAtPosition(cellPosition)[1];
+
+                vgb.addPieceToCell(cellPosition, boardCellPieceType, boardCellPieceColor);
+            }
+            else {
+                vgb.addPieceToCell(cellPosition, null, null);
+            }
+        
+        });
 	}
 
 	updateBarData() {
@@ -182,7 +192,6 @@ class GameHandler {
    */
 
     const gs = new GameState();
-    gs.initialize();
 
     const vgb = new VisibleGameBoard();
     const sb = new StatusBar();

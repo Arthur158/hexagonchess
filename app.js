@@ -87,6 +87,7 @@ wss.on("connection", function connection(ws) {
     currentGame.playerWhite.send(messages.O_MAKE_A_MOVE);
     currentGame.playerBlack.send(messages.S_WAIT_FOR_TURN);
     currentGame.setStatus("WHITE MOVES");
+    console.log(`GAME ${currentGame.id}] PASSED TURN TO WHITE`)
 
     currentGame = new Game(gameStatus.gamesInitialized++);
   }
