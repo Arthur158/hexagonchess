@@ -36,6 +36,10 @@ class Position {
         this.z = z;
     }
 
+    equals(p) {
+        return this.x == p.x && this.y == p.y && this.z == p.z;
+    }
+
     static fromObj(obj) {
         return new Position(obj.x, obj.y, obj.z);
     }

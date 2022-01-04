@@ -54,7 +54,7 @@ class game {
         if (game.prototype.isValidState(w) &&
             game.prototype.isValidTransition(this.gameState, w)) {
             this.gameState = w;
-            console.log("[STATUS] %s", this.gameState);
+            console.log("[GAME " + this.id + "][STATUS] %s", this.gameState);
         } else {
             return new Error(
                 `Impossible status change from ${this.gameState} to ${w}`

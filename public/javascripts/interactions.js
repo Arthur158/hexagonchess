@@ -64,12 +64,15 @@ class GameHandler {
         this.currentSelectedPosition = p;
 		this.visibleGameBoard.selectCell(p);
 
+        let currGameState = this.gameState;
+        let vgb = this.visibleGameBoard;
+
 		this.visibleGameBoard.cells.forEach(function(el) {
-			let obj = JSON.parse(e.target["title"]);
+			let obj = JSON.parse(el.getAttribute("title"));
             let possibleMove = new Position(obj.x, obj.y, obj.z);
 
-			if(PositionChecker.checkPosition(p, possibleMove, this.gameState.gameBoard)) {
-				this.visibleGameBoard.makeCellAvailable(possibleMove);
+			if(PositionChecker.checkPosition(p, possibleMove, currGameState.gameBoard)) {
+				vgb.makeCellAvailable(possibleMove);
 			}
 		});
     }
@@ -97,7 +100,7 @@ class GameHandler {
     updatePosition(p) {
 
 		// Check if the position is a valid one
-        if (!PositionChecker.isPositionOnTheField(p)) {
+        if (!PositionChecker.isPositionOnBoard(p)) {
 			this.statusBar.setStatus(Status.notNice);
             return;
         }
@@ -136,6 +139,7 @@ class GameHandler {
 			this.statusBar.setStatus(Status.waitingServer);
 
 			// Disable the cells after a move
+            this.visibleGameBoard.deselectAllCells();
 			this.visibleGameBoard.disableAllCells();
 		}
 		// If not, select the clicked position
@@ -198,6 +202,7 @@ class GameHandler {
     const tb = new TimerBar();
 
     const gh = new GameHandler(gs, vgb, tb, sb, socket);
+    vgb.initialize(gh);
 
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);

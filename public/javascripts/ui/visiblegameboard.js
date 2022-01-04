@@ -16,7 +16,6 @@ class VisibleGameBoard {
      */
     initialize(gameHandler) {
         this.initializeCells(gameHandler);
-        this.initializeStartingPosition();
     }
     /**
      * Initializes the cells with the right click events
@@ -32,12 +31,6 @@ class VisibleGameBoard {
                 gameHandler.updatePosition(clickedPosition);
             });
         });
-    }
-    /**
-     * Initializes the cells with the right pieces on the starting position (debatable if it is needed)
-     */
-    initializeStartingPositions() {
-        //TODO
     }
     /**
      * Add a piece type (or remove one) at the respective position
@@ -94,12 +87,12 @@ class VisibleGameBoard {
      */
     deselectAllCells() {
         this.cells.forEach(function (el) {
-            if (el.className.includes(" selected")) {
-                el.className.replace(" selected", "");
-            }
-            if (el.className.includes(" available")) {
-                el.className.replace(" available", "");
-            }
+            let s = el.className;
+
+            s = s.replace(" selected", "");
+            s = s.replace(" available", "");
+        
+            el.className = s;
         });
     }
 

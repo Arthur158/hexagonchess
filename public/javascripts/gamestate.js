@@ -32,6 +32,11 @@ class GameBoard {
      */
     initializeGlinski() {
         this.cells[0][5] = new BoardCell("KING", "WHITE");
+        this.cells[10][5] = new BoardCell("KING", "BLACK");
+        for(let i = 1; i < 10; i++) {
+            this.cells[6][i] = new BoardCell("PAWN", "BLACK");
+        }
+        this.cells[1][5] = new BoardCell("BISHOP", "WHITE");
     }
 
     /**
@@ -80,6 +85,8 @@ class GameBoard {
 
             this.setPieceAtPosition(p1, null, null);
             this.setPieceAtPosition(p2, piece[0], piece[1])
+
+            //console.log(`[DEBUG] Performed ${piece[0]} ${p1}:${p2}`);
 
             return overriden;
         }

@@ -12,41 +12,43 @@
     <body>
         <h1 id="gameTitle">HEXAGON CHESS</h1>
         <button id="forfeitBtn" type="submit">FORFEIT</button>
-        <section id="board">
-            <img src="images/board2.png" alt="board">
+        <section id="playspace">
+            <div id="board">
+                <img src="images/board2.png" alt="board">
 
-            <% 
-            let leftOffset = 485;
-            let bottomOffset = 60;
-            let verticalIncrease = 73;
-            let horizontalIncrease = 63.7;
+                <% 
+                let leftOffset = 47.4; //485
+                let bottomOffset = 7; //60
+                let verticalIncrease = 8.08; //73
+                let horizontalIncrease = 6.2; //63.7
 
-            function toPosition(level, file) {
-                let x = level - 5;
-                let y = file > 5 ? file - 5 : 0;
-                let z = file < 5 ? 5 - file : 0;
+                function toPosition(level, file) {
+                    let x = level - 5;
+                    let y = file > 5 ? file - 5 : 0;
+                    let z = file < 5 ? 5 - file : 0;
 
-                return {x: x, y: y, z: z};
-            }
+                    return {x: x, y: y, z: z};
+                }
 
-            for(let i = 0; i < 11; i++) {
-                for(let j = 1; j < Math.min(6, 11 - i); j++) {
+                for(let i = 0; i < 11; i++) {
+                    for(let j = 1; j < Math.min(6, 11 - i); j++) {
+                        %>
+                            <span class="cell" style="left: <%= leftOffset - j*horizontalIncrease %>%; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>%" title="<%= JSON.stringify(toPosition(i, 5 - j)) %>"></span>
+                        <%
+                    }
+                    for(let k = 1; k < Math.min(6, 11 - i); k++) {
+                        %>
+                            <span class="cell" style="left: <%= leftOffset + k*horizontalIncrease %>%; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>%" title="<%= JSON.stringify(toPosition(i, k + 5)) %>"></span>
+                        <%
+                    }  
+                    
+                    // This is the middle file (F)
                     %>
-                        <span class="cell" style="left: <%= leftOffset - j*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + j*(verticalIncrease/2) %>px" title="<%= JSON.stringify(toPosition(i, 5 - j)) %>"></span>
+                        <span class="cell" style="left: <%= leftOffset %>%; bottom: <%= bottomOffset + i*verticalIncrease %>%" title="<%= JSON.stringify(toPosition(i, 5)) %>"></span>
                     <%
                 }
-                for(let k = 1; k < Math.min(6, 11 - i); k++) {
-                    %>
-                        <span class="cell" style="left: <%= leftOffset + k*horizontalIncrease %>px; bottom: <%= bottomOffset + i*verticalIncrease + k*(verticalIncrease/2) %>px" title="<%= JSON.stringify(toPosition(i, k + 5)) %>"></span>
-                    <%
-                }  
-                
-                // This is the middle file (F)
                 %>
-                    <span class="cell" style="left: <%= leftOffset %>px; bottom: <%= bottomOffset + i*verticalIncrease %>px" title="<%= JSON.stringify(toPosition(i, 5)) %>"></span>
-                <%
-            }
-            %>
+            </div>
         </section>
         <section id="stats">
             <div id="timer1" class="timer">
@@ -59,7 +61,7 @@
                 <span id="stopwatch2">00:00</span>
             </div>
 
-            <span id="message">Waiting...</span>
+            <span id="status">Waiting...</span>
         </section>
 
         <script src="javascripts/config.js"></script>

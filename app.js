@@ -58,7 +58,7 @@ wss.on("connection", function connection(ws) {
   websockets[con["id"]] = currentGame;
 
   console.log(
-    `Player ${con["id"]} placed in game ${currentGame.id} as ${playerType}`
+    `[GAME ${currentGame.id}][INFO] Player ${con["id"]} placed in game ${currentGame.id} as ${playerType}`
   );
 
   /*
@@ -84,10 +84,10 @@ wss.on("connection", function connection(ws) {
      /**
      * WHITE player starts
      */
-    currentGame.playerWhite.send(messages.O_MAKE_A_MOVE);
+    currentGame.playerWhite.send(messages.S_MAKE_A_MOVE);
     currentGame.playerBlack.send(messages.S_WAIT_FOR_TURN);
     currentGame.setStatus("WHITE MOVES");
-    console.log(`GAME ${currentGame.id}] PASSED TURN TO WHITE`)
+    console.log(`[GAME ${currentGame.id}][INFO] PASSED TURN TO WHITE`)
 
     currentGame = new Game(gameStatus.gamesInitialized++);
   }
@@ -105,7 +105,7 @@ wss.on("connection", function connection(ws) {
     const gameObjData = gameObj.gameData;
     const isPlayerWhite = gameObj.playerWhite == con ? 1 : 0;
 
-    if(oMsg.type == messages.O_MADE_MOVE) {
+    if(oMsg.type == messages.T_MADE_MOVE) {
       if(isPlayerWhite == (gameObjData.turn + 1 % 2)) {
         let data = JSON.parse(oMsg.data);
 
@@ -143,7 +143,7 @@ wss.on("connection", function connection(ws) {
         update.data = JSON.stringify(gameObjData);
 
         gameObj.playerWhite.send(JSON.stringify(update));
-        gameObj.playerWhite.send(JSON.stringify(update));
+        gameObj.playerBlack.send(JSON.stringify(update));
 
         if(isPlayerWhite) {
           gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
@@ -217,14 +217,14 @@ wss.on("connection", function connection(ws) {
           gameObj.playerWhite.close();
           gameObj.playerWhite = null;
         } catch (e) {
-          console.log("Player A closing: " + e);
+          console.log("Player WHITE closing: " + e);
         }
 
         try {
           gameObj.playerBlack.close();
           gameObj.playerBlack = null;
         } catch (e) {
-          console.log("Player B closing: " + e);
+          console.log("Player BLACK closing: " + e);
         }
       }
     }
