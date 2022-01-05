@@ -40,6 +40,10 @@ class Position {
         return this.x == p.x && this.y == p.y && this.z == p.z;
     }
 
+    toString() {
+        return `(${this.x}, ${this.y}, ${this.z})`;
+    }
+
     static fromObj(obj) {
         return new Position(obj.x, obj.y, obj.z);
     }
@@ -72,6 +76,19 @@ class PositionChecker {
      */
     static isPositionOnBoard(position) {
         return true;
+    }
+
+    /**
+     * Simple function that checks if the piece at the given position on board is the
+     * same color as the expected color
+     * 
+     * @param {Position} position 
+     * @param {GameBoard} board 
+     * @param {string} expectedColor 
+     * @returns {boolean}
+     */
+    static sameColor(position, board, expectedColor) {
+        return board.getPieceAtPosition(position)[1] == expectedColor;
     }
 
     /**

@@ -52,9 +52,8 @@
   exports.T_ILLEGAL_MOVE = "ILLEGAL-MOVE-MADE";
   exports.O_ILLEGAL_MOVE = {
     type: exports.T_ILLEGAL_MOVE,
-    data: null,
   }
-  //exports.S_ILLEGAL_MOVE does not exist, as data neets to be set
+  exports.S_ILLEGAL_MOVE = JSON.stringify(exports.O_ILLEGAL_MOVE);
 
   /**
    * server to BLACK or WHITE

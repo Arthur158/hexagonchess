@@ -3,8 +3,9 @@
  * This takes care of the actual visible elements and their actions
  */
 class VisibleGameBoard {
-    constructor() {
+    constructor(color) {
         this.gameHandler = null;
+        this.color = color;
 
         let elements = document.querySelectorAll(".cell");
         this.cells = Array.from(elements);
@@ -52,6 +53,9 @@ class VisibleGameBoard {
                 if (color === Color.BLACK) {
                     el.className += " black";
                 }
+                else {
+                    el.className += " white";
+                }
             }
         });
     }
@@ -78,6 +82,7 @@ class VisibleGameBoard {
         this.cells.forEach(function (el) {
             if (el.getAttribute("title") === JSON.stringify(position)) {
                 el.className += " available";
+                el.style.pointerEvents = "all";
             }
         });
     }
@@ -100,8 +105,12 @@ class VisibleGameBoard {
      * Makes all cells clickable
      */
     enableAllCells() {
+        let playerColor = this.color;
+
         this.cells.forEach(function(el) {
-            el.style.pointerEvents = "all";
+            if(el.className.includes(playerColor.toLowerCase())){
+                el.style.pointerEvents = "all";
+            }
         });
     }
 

@@ -71,7 +71,7 @@ class game {
     /**
      * Adds a player to the game. Returns an error if a player cannot be added to the current game.
      * @param {websocket} p WebSocket object of the player
-     * @returns {(string|Error)} returns "A" or "B" depending on the player added; returns an error if that isn't possible
+     * @returns {(string|Error)} returns "WHITE" or "BLACK" depending on the player added; returns an error if that isn't possible
      */
     addPlayer(p) {
         if (this.gameState != "0 JOINT" && this.gameState != "1 JOINT") {

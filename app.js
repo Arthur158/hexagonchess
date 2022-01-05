@@ -106,7 +106,7 @@ wss.on("connection", function connection(ws) {
     const isPlayerWhite = gameObj.playerWhite == con ? 1 : 0;
 
     if(oMsg.type == messages.T_MADE_MOVE) {
-      if(isPlayerWhite == (gameObjData.turn + 1 % 2)) {
+      if(isPlayerWhite == ((gameObjData.turn + 1) % 2)) {
         let data = JSON.parse(oMsg.data);
 
         let p1 = Position.fromObj(data.p1);
@@ -115,16 +115,25 @@ wss.on("connection", function connection(ws) {
         let onBoardMove = PositionChecker.isPositionOnBoard(p1) && 
                           PositionChecker.isPositionOnBoard(p2);
 
+        let goodColor = PositionChecker.sameColor(p1, gameObjData.gameBoard, isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
+
         let legalMove = PositionChecker.checkPosition(p1, p2, gameObjData.gameBoard);
 
-        if (!onBoardMove || !legalMove) {
-          isPlayerWhite ? gameObj.playerWhite.send(messages.T_ILLEGAL_MOVE) 
-                        : gameObj.playerBlack.send(messages.T_ILLEGAL_MOVE);
+        if (!onBoardMove || !goodColor || !legalMove) {
+          isPlayerWhite ? gameObj.playerWhite.send(messages.S_ILLEGAL_MOVE) 
+                        : gameObj.playerBlack.send(messages.S_ILLEGAL_MOVE);
+
+          let update = messages.O_GAME_DATA;
+          update.data = JSON.stringify(gameObjData);
+  
+          gameObj.playerWhite.send(JSON.stringify(update));
+          gameObj.playerBlack.send(JSON.stringify(update));
             
           return;
         }
 
         gameObjData.performMove(p1, p2);
+        console.log(`[GAME ${gameObj.id}][DEBUG] Performed ${p1.toString()}:${p2.toString()}`);
 
         if(false) {
           // check for win conditions
@@ -157,39 +166,12 @@ wss.on("connection", function connection(ws) {
         }
 
       }
+      else {
+        console.log(`[DEBUG] isPlayerWhite = ${isPlayerWhite}, turn mod = ${(gameObjData.turn + 1) % 2}`);
+
+        con.send(messages.S_ILLEGAL_MOVE);
+      }
     }
-
-    // if (isPlayerWhite) {
-    //   /*
-    //    * player A cannot do a lot, just send the target word;
-    //    * if player B is already available, send message to B
-    //    */
-    //   if (oMsg.type == messages.T_TARGET_WORD) {
-    //     gameObj.setWord(oMsg.data);
-
-    //     if (gameObj.hasTwoConnectedPlayers()) {
-    //       gameObj.playerBlack.send(message);
-    //     }
-    //   }
-    // } else {
-    //   /*
-    //    * player B can make a guess;
-    //    * this guess is forwarded to A
-    //    */
-    //   if (oMsg.type == messages.T_MAKE_A_GUESS) {
-    //     gameObj.playerWhite.send(message);
-    //     gameObj.setStatus("CHAR GUESSED");
-    //   }
-
-    //   /*
-    //    * player B can state who won/lost
-    //    */
-    //   if (oMsg.type == messages.T_GAME_WON_BY) {
-    //     gameObj.setStatus(oMsg.data);
-    //     //game was won by somebody, update statistics
-    //     gameStatus.gamesCompleted++;
-    //   }
-    // }
   });
 
   con.on("close", function(code) {

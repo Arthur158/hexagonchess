@@ -86,7 +86,6 @@ class GameBoard {
             this.setPieceAtPosition(p1, null, null);
             this.setPieceAtPosition(p2, piece[0], piece[1])
 
-            //console.log(`[DEBUG] Performed ${piece[0]} ${p1}:${p2}`);
 
             return overriden;
         }
@@ -97,14 +96,15 @@ class GameBoard {
     /**
      * Updates the cells based on provided object
      * 
-     * @param {Array} arr 
+     * @param {Object} obj 
      */
-    fromObj(arr) {
+    fromObj(obj) {
+        let arr = obj.cells;
+
         for(let i = 0; i < arr.length; i++) {
             for(let j = 0; j < arr[i].length; j++) {
-                if(!typeof arr[i][j] === undefined) {
-                    let bcobj = arr[i][j];
-                    
+                let bcobj = arr[i][j];
+                if(bcobj != null){
                     this.cells[i][j] = new BoardCell(bcobj.pieceType, bcobj.color);
                 }
             }
@@ -170,7 +170,7 @@ class GameState {
         this.turn = obj.turn;
         this.losses = obj.losses;
 
-        this.gameBoard.fromObj(obj);
+        this.gameBoard.fromObj(obj.gameBoard);
     }
 
     performMove(p1, p2) {

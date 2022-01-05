@@ -26,12 +26,6 @@ class GameHandler {
         this.currentSelectedPosition = null;
     }
     /**
-   * Initializes the board with starting positions.
-   */
-    initializeBoard() {
-        this.visibleGameBoard.initializeStartingPositions();
-    }
-    /**
    * Retrieve the player type.
    * @returns {PlayerType} player type
    */
@@ -197,7 +191,7 @@ class GameHandler {
 
     const gs = new GameState();
 
-    const vgb = new VisibleGameBoard();
+    const vgb = new VisibleGameBoard(PlayerType.WHITE);
     const sb = new StatusBar();
     const tb = new TimerBar();
 
@@ -208,11 +202,11 @@ class GameHandler {
         let incomingMsg = JSON.parse(event.data);
 
         // set player type
-        if (incomingMsg.type == Messages.T_PLAYER_TYPE) {
+        if (incomingMsg.type == Messages.T_PLAYER_COLOR) {
             gh.setPlayerType(incomingMsg.data);
             // should be "WHITE" or "BLACK"
 
-			gh.initializeBoard();
+            vgb.color = gh.playerType;
 			vgb.disableAllCells();
 			tb.setTimer(1, 0);
 			tb.setTimer(2, 0);
