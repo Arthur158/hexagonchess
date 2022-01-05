@@ -21,15 +21,15 @@ body {
     height: 50px;
 }
 
-#timer1 {
+#timer2 {
     top: 25%;
 }
 
-#timer2 {
+#timer1 {
     bottom: 25%;
 }
 
-#timer2 img {
+#timer1 img {
     filter:invert(0.6);
 }
 

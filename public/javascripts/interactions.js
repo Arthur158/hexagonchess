@@ -208,8 +208,8 @@ class GameHandler {
 
             vgb.color = gh.playerType;
 			vgb.disableAllCells();
-			tb.setTimer(1, 0);
-			tb.setTimer(2, 0);
+			tb.setTimer(1, 1800000);
+			tb.setTimer(2, 1800000);
 			sb.setStatus(Status.waitingOpponent);
 
 			if (gh.getPlayerType() == PlayerType.BLACK) {
@@ -225,11 +225,23 @@ class GameHandler {
 
 			gh.updateBarData();
 			gh.updateBoard();
+
+            tb.setTimer(1, gh.gameState.whiteTimer);
+            tb.setTimer(2, gh.gameState.blackTimer);
 		}
 
 		if (incomingMsg.type == Messages.T_MAKE_A_MOVE) {
 			vgb.enableAllCells();
 			sb.setStatus(Status.makeMove);
+
+            if(gh.playerType == PlayerType.WHITE) {
+                tb.pauseCounting(PlayerType.BLACK);
+            }
+            else {
+                tb.pauseCounting(PlayerType.WHITE);
+            }
+
+            tb.startCounting(gh.playerType);
 		}
 
 		if (incomingMsg.type == Messages.T_ILLEGAL_MOVE) {
@@ -240,6 +252,15 @@ class GameHandler {
 		if (incomingMsg.type == Messages.T_WAIT_FOR_TURN) {
 			vgb.disableAllCells();
 			sb.setStatus(Status.waitingTurn);
+
+            tb.pauseCounting(gh.playerType);
+
+            if(gh.playerType == PlayerType.WHITE) {
+                tb.startCounting(PlayerType.BLACK);
+            }
+            else {
+                tb.startCounting(PlayerType.WHITE);
+            }
 		}
 
         // // Player B: wait for target word and then start guessing ...
