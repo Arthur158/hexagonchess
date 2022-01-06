@@ -31,12 +31,41 @@ class GameBoard {
      * Function that initializes the board with the Glinski starting positions
      */
     initializeGlinski() {
-        this.cells[0][5] = new BoardCell("KING", "WHITE");
-        this.cells[10][5] = new BoardCell("KING", "BLACK");
+        //white pieces
+        this.cells[0][6] = new BoardCell("KING", "WHITE");
+        this.cells[0][4] = new BoardCell("QUEEN", "WHITE");
+
+        this.cells[0][3] = new BoardCell("KNIGHT", "WHITE");
+        this.cells[0][7] = new BoardCell("KNIGHT", "WHITE");
+
+        this.cells[0][2] = new BoardCell("ROOK", "WHITE");
+        this.cells[0][8] = new BoardCell("ROOK", "WHITE");
+
+        this.cells[1][5] = new BoardCell("BISHOP", "WHITE");
+        this.cells[2][5] = new BoardCell("BISHOP", "WHITE");
+        this.cells[0][5] = new BoardCell("BISHOP", "WHITE");
+
+        //black pieces
+        this.cells[9][6] = new BoardCell("KING", "BLACK");
+        this.cells[9][4] = new BoardCell("QUEEN", "BLACK");
+
+        this.cells[8][3] = new BoardCell("KNIGHT", "BLACK");
+        this.cells[8][7] = new BoardCell("KNIGHT", "BLACK");
+
+        this.cells[7][2] = new BoardCell("ROOK", "BLACK");
+        this.cells[7][8] = new BoardCell("ROOK", "BLACK");
+
+        this.cells[10][5] = new BoardCell("BISHOP", "BLACK");
+        this.cells[9][5] = new BoardCell("BISHOP", "BLACK");
+        this.cells[8][5] = new BoardCell("BISHOP", "BLACK");
+
+        //pawns
         for(let i = 1; i < 10; i++) {
             this.cells[6][i] = new BoardCell("PAWN", "BLACK");
         }
-        this.cells[1][5] = new BoardCell("BISHOP", "WHITE");
+        for(let i = 1; i < 10; i++) {
+            this.cells[4-Math.abs(5-i)][i] = new BoardCell("PAWN", "WHITE");
+        }
     }
 
     /**
