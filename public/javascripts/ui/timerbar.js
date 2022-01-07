@@ -50,9 +50,9 @@ class TimerBar {
         let timerObj = this;
 
         this.interval = setInterval(function() {
-            timerObj.updateTimer(color == "WHITE" ? 1 : 2);
-
             color == "WHITE" ? timerObj.timerWhite -= 1000 : timerObj.timerBlack -= 1000;
+
+            timerObj.updateTimer(color == "WHITE" ? 1 : 2);
         }, 1000);
     }
 

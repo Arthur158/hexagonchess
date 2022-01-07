@@ -173,6 +173,7 @@ class GameState {
         this.gameBoard.initializeGlinski();
         this.whiteTimer = 1800000;
         this.blackTimer = 1800000;
+        this.lastUpdated = (new Date()).getTime();
         this.turn = 0;
         this.losses = {
             white: [],
@@ -213,6 +214,25 @@ class GameState {
                 this.losses.black.push(lostPiece[0]);
             }
         }
+    }
+
+    initializeTimer() {
+        this.lastUpdated = (new Date()).getTime();
+    }
+
+    updateTimer(color) {
+        let nowTime = (new Date()).getTime();
+        
+        let elapsedTime = nowTime - this.lastUpdated;
+
+        if(color == "WHITE") {
+            this.whiteTimer -= elapsedTime;
+        }
+        else {
+            this.blackTimer -= elapsedTime;
+        }
+
+        this.lastUpdated = (new Date()).getTime();
     }
 }
 

@@ -89,6 +89,8 @@ wss.on("connection", function connection(ws) {
     currentGame.setStatus("WHITE MOVES");
     console.log(`[GAME ${currentGame.id}][INFO] PASSED TURN TO WHITE`)
 
+    currentGame.gameData.initializeTimer();
+
     currentGame = new Game(gameStatus.gamesInitialized++);
   }
 
@@ -134,6 +136,7 @@ wss.on("connection", function connection(ws) {
 
         gameObjData.performMove(p1, p2);
         console.log(`[GAME ${gameObj.id}][DEBUG] Performed ${p1.toString()}:${p2.toString()}`);
+        gameObjData.updateTimer(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
 
         if(false) {
           // check for win conditions
