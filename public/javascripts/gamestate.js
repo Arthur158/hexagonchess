@@ -153,15 +153,6 @@ class GameState {
     }
 
     /**
-     * Sets the game board
-     * 
-     * @param {GameBoard} board 
-     */
-    setBoard(board) {
-        this.gameBoard = board;
-    }
-
-    /**
      * 
      * @param {object} obj 
      */

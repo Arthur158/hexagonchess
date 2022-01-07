@@ -262,22 +262,6 @@ class GameHandler {
                 tb.startCounting(PlayerType.WHITE);
             }
 		}
-
-        // // Player B: wait for target word and then start guessing ...
-        // if (incomingMsg.type == Messages.T_TARGET_WORD && gh.getPlayerType() == "B") {
-        //     gh.setTargetWord(incomingMsg.data);
-
-        //     sb.setStatus(Status["player2Intro"]);
-        //     gh.initializeVisibleWordArray(); // initialize the word array, now that we have the word
-        //     ab.initialize();
-        //     vw.setWord(gh.getVisibleWordArray());
-        // }
-
-        // // Player A: wait for guesses and update the board ...
-        // if (incomingMsg.type == Messages.T_MAKE_A_GUESS && gh.getPlayerType() == "A") {
-        //     sb.setStatus(Status["guessed"] + incomingMsg.data);
-        //     gh.updateGame(incomingMsg.data);
-        // }
     };
 
     socket.onopen = function () {
