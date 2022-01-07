@@ -111,21 +111,38 @@ class PositionChecker {
         let vector = new Position(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
 
         // simplifies this vector as much as possible
-        while (vector.x > 0 && vector.y < 0) {
-            vector.x --;
-            vector.y ++;
-            vector.z ++;
-        }
-        while (vector.x > 0 && vector.z < 0) {
-            vector.x --;
-            vector.z ++;
-            vector.y ++;
-        }
-        while (vector.y > 0 && vector.z > 0) {
-            vector.z --;
-            vector.y --;
-            vector.x ++;
-        }
+        //while((vector.y < 0 && vector.z < 0)||(vector.x < 0 && vector.z > 0)||(vector.x > 0 && vector.y < 0) || (vector.x > 0 && vector.z < 0)||(vector.y > 0 && vector.z > 0)||(vector.x < 0 && vector.y > 0)){
+            while (vector.x > 0 && vector.y < 0) {
+                vector.x --;
+                vector.y ++;
+                vector.z ++;
+            }
+            while (vector.x < 0 && vector.y > 0) {
+                vector.x ++;
+                vector.y --;
+                vector.z --;
+            }
+            while (vector.x > 0 && vector.z < 0) {
+                vector.x --;
+                vector.z ++;
+                vector.y ++;
+            }
+            while (vector.x < 0 && vector.z > 0) {
+                vector.x ++;
+                vector.z --;
+                vector.y --;
+            }
+            while (vector.y > 0 && vector.z > 0) {
+                vector.z --;
+                vector.y --;
+                vector.x ++;
+            }
+            while (vector.y < 0 && vector.z < 0) {
+                vector.z ++;
+                vector.y ++;
+                vector.x --;
+            }
+        
 
         // returns false if the piece doesn't actually move
         if (vector.x == 0 && vector.y == 0 && vector.z == 0) {
@@ -138,6 +155,7 @@ class PositionChecker {
                 if (Math.abs(vector.x) < 2 && Math.abs(vector.y) < 2 && Math.abs(vector.z) < 2) {
                     return true;
                 }
+                break;
 
             case PieceType.KNIGHT:
                 if (vector.x == 2) {
@@ -170,6 +188,7 @@ class PositionChecker {
                         return true;
                     }
                 }
+                break;
             case PieceType.PAWN:
                 if (pieceStartingPosition[1] == Color.WHITE) {
                     if (vector.x == 1 && vector.y == 0 && vector.z == 0) {
@@ -213,6 +232,7 @@ class PositionChecker {
                         }
                     }
                 }
+                break;
             case PieceType.BISHOP:
                 if (vector.x == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.z)) {
@@ -245,6 +265,7 @@ class PositionChecker {
                         return true;
                     }
                 }
+                break;
 
             case PieceType.ROOK:
                 if (vector.x == 0 && vector.y == 0) {
@@ -271,6 +292,7 @@ class PositionChecker {
                     }
                     return true;
                 }
+                break;
             case PieceType.QUEEN:
                 if (vector.x == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.z)) {
@@ -327,6 +349,7 @@ class PositionChecker {
                     }
                     return true;
                 }
+                break;
         }
         return false;
     }
