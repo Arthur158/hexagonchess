@@ -169,22 +169,22 @@ class PositionChecker {
                     }
                 }
                 if (vector.y == 2) {
-                    if ((vector.x == 1 && vector.z == 0) || (vector.z == 1 && vector.x == 0)) {
+                    if ((vector.x == 1 && vector.z == 0) || (vector.z == -1 && vector.x == 0)) {
                         return true;
                     }
                 }
                 if (vector.y == -2) {
-                    if ((vector.x == -1 && vector.z == 0) || (vector.z == -1 && vector.x == 0)) {
+                    if ((vector.x == -1 && vector.z == 0) || (vector.z == 1 && vector.x == 0)) {
                         return true;
                     }
                 }
                 if (vector.z == 2) {
-                    if ((vector.y == 1 && vector.x == 0) || (vector.x == 1 && vector.y == 0)) {
+                    if ((vector.y == -1 && vector.x == 0) || (vector.x == 1 && vector.y == 0)) {
                         return true;
                     }
                 }
                 if (vector.z == -2) {
-                    if ((vector.y == -1 && vector.x == 0) || (vector.x == -1 && vector.y == 0)) {
+                    if ((vector.y == 1 && vector.x == 0) || (vector.x == -1 && vector.y == 0)) {
                         return true;
                     }
                 }
@@ -199,8 +199,12 @@ class PositionChecker {
                     if (vector.x == 2 && vector.y == 0 && vector.z == 0) {
                         if (pieceEndingPosition == null) {
                             if (otherPieceGetter(p2.x - 1, p2.y, p2.z, board) == null) {
-                                if (p1.x == -1) { // !!careful implementation
-                                    return true;
+                                for(var i=1;i<6;i++){
+                                    if(p1.x==-i){
+                                        if((p1.y==i-1&&p1.z==0)||(p1.z==i-1&&p1.y==0)){
+                                            return true;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -236,7 +240,7 @@ class PositionChecker {
             case PieceType.BISHOP:
                 if (vector.x == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.z)) {
-                        for (var i = 1; i <= Math.abs(vector.y); i++) {
+                        for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (otherPieceGetter(p1.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                                 return false;
                             }
@@ -246,7 +250,7 @@ class PositionChecker {
                 }
                 if (vector.y == 0) {
                     if (Math.abs(vector.x) == Math.abs(vector.z)) {
-                        for (var i = 1; i <= Math.abs(vector.x); i++) {
+                        for (var i = 1; i <= Math.abs(vector.x)-1; i++) {
                             if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                                 return false;
                             }
@@ -257,7 +261,7 @@ class PositionChecker {
                 }
                 if (vector.z == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.x)) {
-                        for (var i = 1; i <= Math.abs(vector.y); i++) {
+                        for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z, board) != null) {
                                 return false;
                             }
@@ -269,7 +273,7 @@ class PositionChecker {
 
             case PieceType.ROOK:
                 if (vector.x == 0 && vector.y == 0) {
-                    for (var i = 1; i <= Math.abs(vector.z); i++) {
+                    for (var i = 1; i <= Math.abs(vector.z)-1; i++) {
                         if (otherPieceGetter(p1.x, p1.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                             return false;
                         }
@@ -277,7 +281,7 @@ class PositionChecker {
                     return true;
                 }
                 if (vector.x == 0 && vector.z == 0) {
-                    for (var i = 1; i <= Math.abs(vector.y); i++) {
+                    for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                         if (otherPieceGetter(p1.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z, board) != null) {
                             return false;
                         }
@@ -285,7 +289,7 @@ class PositionChecker {
                     return true;
                 }
                 if (vector.y == 0 && vector.z == 0) {
-                    for (var i = 1; i <= Math.abs(vector.x); i++) {
+                    for (var i = 1; i <= Math.abs(vector.x)-1; i++) {
                         if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y, p1.z, board) != null) {
                             return false;
                         }
@@ -296,7 +300,7 @@ class PositionChecker {
             case PieceType.QUEEN:
                 if (vector.x == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.z)) {
-                        for (var i = 1; i <= Math.abs(vector.y); i++) {
+                        for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (otherPieceGetter(p1.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                                 return false;
                             }
@@ -306,7 +310,7 @@ class PositionChecker {
                 }
                 if (vector.y == 0) {
                     if (Math.abs(vector.x) == Math.abs(vector.z)) {
-                        for (var i = 1; i <= Math.abs(vector.x); i++) {
+                        for (var i = 1; i <= Math.abs(vector.x)-1; i++) {
                             if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                                 return false;
                             }
@@ -317,7 +321,7 @@ class PositionChecker {
                 }
                 if (vector.z == 0) {
                     if (Math.abs(vector.y) == Math.abs(vector.x)) {
-                        for (var i = 1; i <= Math.abs(vector.y); i++) {
+                        for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z, board) != null) {
                                 return false;
                             }
@@ -326,7 +330,7 @@ class PositionChecker {
                     }
                 }
                 if (vector.x == 0 && vector.y == 0) {
-                    for (var i = 1; i <= Math.abs(vector.z); i++) {
+                    for (var i = 1; i <= Math.abs(vector.z)-1; i++) {
                         if (otherPieceGetter(p1.x, p1.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                             return false;
                         }
@@ -334,7 +338,7 @@ class PositionChecker {
                     return true;
                 }
                 if (vector.x == 0 && vector.z == 0) {
-                    for (var i = 1; i <= Math.abs(vector.y); i++) {
+                    for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                         if (otherPieceGetter(p1.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z, board) != null) {
                             return false;
                         }
@@ -342,7 +346,7 @@ class PositionChecker {
                     return true;
                 }
                 if (vector.y == 0 && vector.z == 0) {
-                    for (var i = 1; i <= Math.abs(vector.x); i++) {
+                    for (var i = 1; i <= Math.abs(vector.x)-1; i++) {
                         if (otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y, p1.z, board) != null) {
                             return false;
                         }
