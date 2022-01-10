@@ -365,6 +365,63 @@ function otherPieceGetter(x, y, z, board) {
     return board.getPieceAtPosition(position);
 }
 
+function isKingChecked(color, board){
+    board.cells.forEach(function(e){
+        if (e.getPieceAtPosition[1]==color&&e.getPieceAtPosition[0]==PieceType.KING){
+            king=e;
+        }
+    })
+
+    board.cells.forEach(function(e){
+        if(e.getPieceAtPosition[1]!=color&&checkPosition(e,king,board)){
+            return true;
+        }
+    })
+    return false;
+}
+
+function isPositionChecked(color,board,position){
+    board.cells.forEach(function(e){
+        if(e.getPieceAtPosition[1]!=color&&checkPosition(e,position,board)){
+            return true;
+        }
+    })
+    return false;
+}
+
+function isKingCheckMated(color,board){
+    if(!isKingChecked)return false;
+    board.cells.forEach(function(e){
+        if (e.getPieceAtPosition[1]==color&&e.getPieceAtPosition[0]==PieceType.KING){
+            king=e;
+        }
+    })
+    if(color==Color.WHITE){otherColor=Color.BLACK;}
+    else{otherColor=Color.WHITE;}
+    board.cells.forEach(function(e){
+        if(checkPosition(king,e,board)){
+            if(!isPositionChecked(color,board,e)){
+                return false;
+            }
+        }
+    })
+    return true;
+
+}
+
+function isStaleMate(color,board){
+    board.cells.forEach(function(e){
+        if(e.getPieceAtPosition[1]==color){
+            board.cells.forEach(function(f){
+                if(checkPosition(e,f,board)){
+                    return false;
+                }
+            })
+        }
+    })
+    return true;
+}
+
 if (module) {
     module.exports.Color = Color;
     module.exports.PieceType = PieceType;
