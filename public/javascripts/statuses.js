@@ -13,7 +13,7 @@
     checkPosition: "King is in check position!",
     aborted: "Your gaming partner is no longer available, game aborted. <a href='/play'>Play again!</a>",
     gameWon: "Congratulations! You won!",
-    gameLost: "Checkmate. You lost!",
+    gameLost: "Oh no, you lost!",
     notNice: "That is not very nice!",
     waitingServer: "Waiting for server to respond...",
   };

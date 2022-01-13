@@ -92,5 +92,12 @@
   }
   //exports.S_MADE_MOVE does not exist, as data neets to be set
 
+  exports.T_RESIGNED = "RESIGNED";
+  exports.O_RESIGNED = {
+    type: exports.T_RESIGNED,
+    data: null,
+  }
+
+
 })(typeof exports === "undefined" ? (this.Messages = {}) : exports);
 //if exports is undefined, we are on the client; else the server

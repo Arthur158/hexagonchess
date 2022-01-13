@@ -10,6 +10,7 @@ const messages = require("./public/javascripts/messages");
 const gameStatus = require("./statTracker");
 const Game = require("./game");
 const { PlayerType, PositionChecker, Position } = require("./public/javascripts/utils");
+const { blackWins } = require("./statTracker");
 
 if(process.argv.length < 3) {
   console.log("Error: expected a port as argument (eg. 'node app.js 3000').");
@@ -106,6 +107,28 @@ wss.on("connection", function connection(ws) {
     const gameObj = websockets[con["id"]];
     const gameObjData = gameObj.gameData;
     const isPlayerWhite = gameObj.playerWhite == con ? 1 : 0;
+
+    if(oMsg.type==messages.T_RESIGNED){
+      let data = JSON.parse(oMsg.data);
+      let game_Over_Msg=messages.O_GAME_OVER;
+      if(data.playerType=="WHITE"){
+          game_Over_Msg.data={
+            color: "BLACK",
+          }
+          gameObj.playerBlack.send(game_Over_Msg);
+          gameObj.playerWhite.send(game_Over_Msg);
+          gameObj.setStatus("BLACK");
+
+      }
+      else{
+        game_Over_Msg.data={
+          color: "WHITE",
+        }
+        gameObj.playerBlack.send(game_Over_Msg);
+        gameObj.playerWhite.send(game_Over_Msg);
+        gameObj.setStatus("WHITE");
+      }
+    }
 
     if(oMsg.type == messages.T_MADE_MOVE) {
       if(isPlayerWhite == ((gameObjData.turn + 1) % 2)) {

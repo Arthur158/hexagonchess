@@ -1,5 +1,7 @@
 /* eslint-disable no-undef */
 
+const { PlayerType } = require("./utils");
+
 const clickSound = new Audio("../data/click.wav");
 
 /**
@@ -173,6 +175,14 @@ class GameHandler {
 		this.timerBar.setTimer(1, whiteTime);
 		this.timerBar.setTimer(2, blackTime);
 	}
+
+    resignMessage() {
+        let resignMessage=Messages.resignMessage;
+        resignMessage.data=Stringify({
+            playerType=this.playerType,
+        })
+        this.send(JSON.stringify(resignMessage))
+    }
 }
 
 
@@ -262,6 +272,16 @@ class GameHandler {
                 tb.startCounting(PlayerType.WHITE);
             }
 		}
+
+        if(incomingMsg.type == Messages.GAME_OVER) {
+            let data=JSON.parse(incomingMsg.data);
+            if(data.color==PlayerType){
+                sb.setStatus(Status.gameWon)
+            }
+            else{
+                sb.setStatus(gameLost);
+            }
+        }
     };
 
     socket.onopen = function () {

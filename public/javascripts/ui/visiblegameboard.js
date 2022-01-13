@@ -9,6 +9,8 @@ class VisibleGameBoard {
 
         let elements = document.querySelectorAll(".cell");
         this.cells = Array.from(elements);
+
+        this.resignButton = document.querySelector("#forfeitBtn");
     }
     /**
      * Initializes the cells with the click events and also puts the pieces in the right spot
@@ -32,6 +34,12 @@ class VisibleGameBoard {
                 gameHandler.updatePosition(clickedPosition);
             });
         });
+    }
+
+    initializeResignButton(gameHandler) {
+        this.resignButton.addEventListener("click",function singleClick(e){
+            gameHandler.resignMessage();
+        })
     }
     /**
      * Add a piece type (or remove one) at the respective position
