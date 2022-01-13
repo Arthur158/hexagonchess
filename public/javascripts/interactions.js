@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 
-const { PlayerType } = require("./utils");
-
 const clickSound = new Audio("../data/click.wav");
 
 /**
@@ -177,11 +175,9 @@ class GameHandler {
 	}
 
     resignMessage() {
-        let resignMessage=Messages.resignMessage;
-        resignMessage.data=Stringify({
-            playerType=this.playerType,
-        })
-        this.send(JSON.stringify(resignMessage))
+        let resignMessage=Messages.O_RESIGNED;
+        resignMessage.data=this.playerType;
+        this.socket.send(JSON.stringify(resignMessage))
     }
 }
 
@@ -204,9 +200,12 @@ class GameHandler {
     const vgb = new VisibleGameBoard(PlayerType.WHITE);
     const sb = new StatusBar();
     const tb = new TimerBar();
+    const rb = new ResignButton();
 
     const gh = new GameHandler(gs, vgb, tb, sb, socket);
     vgb.initialize(gh);
+    rb.initialize(gh);
+
 
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
@@ -273,13 +272,14 @@ class GameHandler {
             }
 		}
 
-        if(incomingMsg.type == Messages.GAME_OVER) {
-            let data=JSON.parse(incomingMsg.data);
-            if(data.color==PlayerType){
+        if(incomingMsg.type == Messages.T_GAME_OVER) {
+            tb.pauseCounting(PlayerType.WHITE);
+            tb.pauseCounting(PlayerType.BLACK);
+            if(incomingMsg.data==gh.playerType){
                 sb.setStatus(Status.gameWon)
             }
             else{
-                sb.setStatus(gameLost);
+                sb.setStatus(Status.gameLost);
             }
         }
     };

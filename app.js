@@ -109,23 +109,18 @@ wss.on("connection", function connection(ws) {
     const isPlayerWhite = gameObj.playerWhite == con ? 1 : 0;
 
     if(oMsg.type==messages.T_RESIGNED){
-      let data = JSON.parse(oMsg.data);
       let game_Over_Msg=messages.O_GAME_OVER;
-      if(data.playerType=="WHITE"){
-          game_Over_Msg.data={
-            color: "BLACK",
-          }
-          gameObj.playerBlack.send(game_Over_Msg);
-          gameObj.playerWhite.send(game_Over_Msg);
+      if(oMsg.data==PlayerType.WHITE){
+          game_Over_Msg.data= PlayerType.BLACK;
+          gameObj.playerBlack.send(JSON.stringify(game_Over_Msg));
+          gameObj.playerWhite.send(JSON.stringify(game_Over_Msg));
           gameObj.setStatus("BLACK");
 
       }
       else{
-        game_Over_Msg.data={
-          color: "WHITE",
-        }
-        gameObj.playerBlack.send(game_Over_Msg);
-        gameObj.playerWhite.send(game_Over_Msg);
+        game_Over_Msg.data= PlayerType.WHITE;
+        gameObj.playerBlack.send(JSON.stringify(game_Over_Msg));
+        gameObj.playerWhite.send(JSON.stringify(game_Over_Msg));
         gameObj.setStatus("WHITE");
       }
     }
