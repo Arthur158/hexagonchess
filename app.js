@@ -1,4 +1,5 @@
 //@ts-check
+// This is the main app code
 
 const express = require("express");
 const http = require("http");
