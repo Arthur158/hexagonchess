@@ -176,6 +176,7 @@ wss.on("connection", function connection(ws) {
               gameObj.playerWhite.send(JSON.stringify(check));
             }
             
+            return;
         }
 
         if(PositionChecker.isStaleMate(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)) {
