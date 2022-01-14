@@ -9,6 +9,7 @@ class VisibleGameBoard {
 
         let elements = document.querySelectorAll(".cell");
         this.cells = Array.from(elements);
+
     }
     /**
      * Initializes the cells with the click events and also puts the pieces in the right spot

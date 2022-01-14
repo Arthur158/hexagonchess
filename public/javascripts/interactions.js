@@ -173,6 +173,12 @@ class GameHandler {
 		this.timerBar.setTimer(1, whiteTime);
 		this.timerBar.setTimer(2, blackTime);
 	}
+
+    resignMessage() {
+        let resignMessage=Messages.O_RESIGNED;
+        resignMessage.data=this.playerType;
+        this.socket.send(JSON.stringify(resignMessage))
+    }
 }
 
 
@@ -194,9 +200,12 @@ class GameHandler {
     const vgb = new VisibleGameBoard(PlayerType.WHITE);
     const sb = new StatusBar();
     const tb = new TimerBar();
+    const rb = new ResignButton();
 
     const gh = new GameHandler(gs, vgb, tb, sb, socket);
     vgb.initialize(gh);
+    rb.initialize(gh);
+
 
     socket.onmessage = function (event) {
         let incomingMsg = JSON.parse(event.data);
@@ -262,6 +271,17 @@ class GameHandler {
                 tb.startCounting(PlayerType.WHITE);
             }
 		}
+
+        if(incomingMsg.type == Messages.T_GAME_OVER) {
+            tb.pauseCounting(PlayerType.WHITE);
+            tb.pauseCounting(PlayerType.BLACK);
+            if(incomingMsg.data==gh.playerType){
+                sb.setStatus(Status.gameWon)
+            }
+            else{
+                sb.setStatus(Status.gameLost);
+            }
+        }
     };
 
     socket.onopen = function () {
