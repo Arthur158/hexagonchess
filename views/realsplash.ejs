@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;1,100&display=swap" rel="stylesheet">
+
+      <link rel="stylesheet" href="stylesheets/splash.css">
+
+      <title>Delft Hexagon Chess</title>
+   </head>
+   <body>
+      <h1 id="splashTitle">HEXAGON CHESS</h1>
+      <span id="credits">
+         <span style="font-size: 0.5em;">
+            Designed by
+         </span><br>
+         Daniel Peter & Arthur Jaques
+      </span>
+
+      <section id="statSection">
+         <span>Games Initialized: <div class="data"><%= gamesInitialized %></div></span>
+         <span>Games Completed: <div class="data"><%= gamesCompleted %></div></span>
+         <span>Games Aborted: <div class="data"><%= gamesAborted %></div></span>
+         <span>Online Players: <div class="data"><%= onlinePlayers %></div></span>
+         <span>White:Black Win Ratio: 
+            <div class="data">
+            <% if(whiteWins == 0 && blackWins ==0) { %>
+               50 
+            <% } else { %>
+               <%= blackWins == 0 ? 100 : (whiteWins / blackWins) * 100%> 
+            <% } %> 
+            %
+            </div>
+         </span>
+      </section>
+
+      <div id="playBtn" onclick="window.location.href = 'play'">
+         <img src="images/button_hexagons.png">
+         <span>Play</span>
+      </div>
+   </body>
+</html>
+
+<!-- Arthur  does not know github-->
+<!-- test-->

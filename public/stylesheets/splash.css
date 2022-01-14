@@ -1,22 +1,129 @@
+@font-face {
+    font-family: Nemoy;
+    font-weight: lighter;
+    src: url("../fonts/nemoy.light.ttf");
+}
+
 body {
-    background-image: url("images/splash_bg.png");
-    background-color: #a9abc6;
+    background-image: url("../images/splash_bg.png");
+    background-size: cover;
+    background-position-y: bottom;
+    background-attachment: fixed;
+    background-color: #d5d6e9;
 
     font-family: Montserrat, sans-serif;
     font-family: 1.4em;
+
+    cursor: default;
 }
 
 #splashTitle {
     font-family: Nemoy, sans-serif; 
-    text-align: center; 
+    text-align: right; 
     font-size: 5em;
+    width: 600px;
+
+    position: absolute;
+    right: 7%;
+}
+
+#credits {
+    font-family: Montserrat, sans-serif;
+    text-align: left;
+    font-size: 2em;
+    padding-left: 7%;
+    width: 300px;
+
+    position: absolute;
+    left: 0;
+    margin-top: 50px;
 }
 
 #playBtn {
     position: absolute;
     bottom: 20%;
-    right: 20%;
+    right: 7%;
+
+    width: 280px;
+    height: 80px;
 
     font-family: Montserrat, sans-serif;
-    font-size: 2em;
+    font-size: 3em;
+    font-weight: bold;
+
+    color: #e8e8e8;
+    background: rgb(49,39,131);
+    background: linear-gradient(90deg, rgba(49,39,131,0.0) 22%, rgba(49,39,131,1) 100%);
+
+    border-right: solid 3px black;
+}
+
+#playBtn:hover {
+    cursor: pointer;
+}
+
+#playBtn:active {
+    background: linear-gradient(90deg, rgba(49,39,131,0.0) 0%, rgba(49,39,131,1) 60%);
+}
+
+#playBtn span {
+    vertical-align: top;
+    height: 70%;
+    display: inline-block;
+    margin-left: 40px;
+    padding-top: 10px;
+}
+
+#playBtn img {
+    height: 70%;
+    margin-left: 15px;
+    display: inline-block;
+    transition: opacity 1s ease-in;
+    opacity: 0;
+    padding-top: 10px;
+}
+
+#playBtn:hover img {
+    transition: opacity 1s ease-out;
+    opacity: 1;
+}
+
+#statSection {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    width: 390px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    font-family: Montserrat, sans-serif;
+    font-size: 1.5em;
+    color: black;
+
+    border-left: solid 1px black;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 30px;
+
+}
+
+#statSection span {
+    margin-left: 15px;
+}
+
+#statSection .data {
+    position: absolute;
+    right: 0;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+#statSection span::before {
+    content: "> ";
+}
+
+#statSection span:hover::after {
+    content: " <";
 }

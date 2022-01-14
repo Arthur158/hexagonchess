@@ -1,6 +1,12 @@
+@font-face {
+    font-family: Nemoy;
+    font-weight: lighter;
+    src: url("../fonts/nemoy.light.ttf");
+}
+
 body {
     background-image: url("images/game_bg.png");
-    background-color: #e8e8e8;
+    background-color: #d5d6e9;
 
     font-family: Montserrat, sans-serif;
     font-family: 1.4em;

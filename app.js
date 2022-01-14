@@ -51,6 +51,8 @@ let currentGame = new Game(gameStatus.gamesInitialized++);
 let connectionID = 0; //each websocket receives a unique ID
 
 wss.on("connection", function connection(ws) {
+  gameStatus.onlinePlayers++;
+
   /*
    * two-player game: every two players are added to the same game
    */
@@ -202,6 +204,8 @@ wss.on("connection", function connection(ws) {
      * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
      */
     console.log(`${con["id"]} disconnected ...`);
+
+    gameStatus.onlinePlayers--;
 
     if (code == 1001) {
       /*
