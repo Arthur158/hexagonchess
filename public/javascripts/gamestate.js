@@ -68,6 +68,28 @@ class GameBoard {
         }
     }
 
+    getCoordinates(boardCell){
+        let count1=0;
+        let count2=0;
+        for(let i=0;i<this.cells.length;i++){
+            if(this.cells[i].includes(boardCell)){
+                for(let j=0;i<cells[i].length;j++){
+                    if(this.cells[i][j]===e){
+                        return [count1,count2];
+                    }
+                    else{
+                        count2++
+                    }
+                }
+                return [-1,-1];
+            }
+            else{
+                count1++;
+            }
+        }
+        return [-1,-1];
+    }
+
     /**
      * Put the specified piece of color at the requested position on the board (does not do checking)
      * 
@@ -92,7 +114,7 @@ class GameBoard {
 
         let cell = this.cells[newCoords.level][newCoords.file];
 
-        if(cell.pieceType != null) return [cell.pieceType, cell.color];
+        if(cell!= null &&cell.pieceType != null) return [cell.pieceType, cell.color];
     
         return null;
     }

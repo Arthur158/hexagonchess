@@ -97,6 +97,11 @@
     type: exports.T_RESIGNED,
     data: null,
   }
+  
+  exports.T_CHECK="CHECK";
+  exports.O_CHECK={
+    type: exports.O_CHECK,
+  }
 
 
 })(typeof exports === "undefined" ? (this.Messages = {}) : exports);
