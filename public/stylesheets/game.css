@@ -160,3 +160,51 @@ body {
     padding-left: 30px; 
     font-size: 3em;
 }
+
+#forfeitAsk {
+    font-family: MontSerrat, sans-serif; 
+    position:absolute;
+    right:36%;
+    bottom:60%;
+    display:none;
+
+    height: 100px;
+    width: 450px;
+
+    background-color: #322783;
+    color: white;
+
+    font-size: 2em;
+
+}
+
+#forfeitYes {
+    font-family: MontSerrat, sans-serif; 
+    display:none;
+    position: absolute;
+    right:48%;
+    bottom:62%;
+
+    height: 30px;
+    width: 100px;
+
+    z-index:9999,
+
+
+}
+
+#forfeitNo {
+    font-family: MontSerrat, sans-serif; 
+    display:none;
+    position:absolute;
+    right:42%;
+    bottom:62%;
+
+    height: 30px;
+    width: 100px;
+
+    z-index:9999,
+
+
+}
+
