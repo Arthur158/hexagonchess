@@ -180,10 +180,8 @@ wss.on("connection", function connection(ws) {
 
         if(PositionChecker.isStaleMate(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)) {
           // check for stalemate
-          let gameOverMsg = messages.O_GAME_OVER;
-          gameOverMsg.data = "stalemate";
-          gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
-          gameObj.playerBlack.send(JSON.stringify(gameOverMsg));
+          gameObj.playerWhite.send(messages.S_STALEMATE);
+          gameObj.playerBlack.send(messages.S_STALEMATE);
 
           gameObj.setStatus("STALEMATE");
           return;

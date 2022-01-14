@@ -82,6 +82,12 @@
     data: null,
   };
 
+  exports.O_STALEMATE = {
+    type: exports.T_GAME_OVER,
+    data: "stalemate"
+  }
+  exports.S_STALEMATE = JSON.stringify(exports.O_STALEMATE);
+
   /**
    * Players to server
    */  
