@@ -68,6 +68,13 @@ class GameBoard {
         }
     }
 
+    initializeStalemateOrCheckmateOrCheck() {
+        this.cells[0][0] = new BoardCell("KING","BLACK");
+        this.cells[1][4] = new BoardCell("ROOK","WHITE");
+        this.cells[6][1] = new BoardCell("ROOK","WHITE");
+        this.cells[5][4] = new BoardCell("BISHOP","WHITE");
+    }
+
     getCoordinates(boardCell){
         let count1=0;
         let count2=0;
@@ -192,7 +199,7 @@ class GameBoard {
 class GameState {
     constructor(){
         this.gameBoard = new GameBoard();
-        this.gameBoard.initializeGlinski();
+        this.gameBoard.initializeStalemateOrCheckmateOrCheck();
         this.whiteTimer = 1800000;
         this.blackTimer = 1800000;
         this.lastUpdated = (new Date()).getTime();
