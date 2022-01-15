@@ -32,7 +32,7 @@
             <% if(whiteWins == 0 && blackWins ==0) { %>
                50 
             <% } else { %>
-               <%= blackWins == 0 ? 100 : (whiteWins / blackWins) * 100%> 
+               <%= blackWins == 0 ? 100 : Math.round((whiteWins / gamesCompleted) * 1000) / 10%> 
             <% } %> 
             %
             </div>

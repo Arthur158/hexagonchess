@@ -43,6 +43,27 @@
      }
  }
 
+@keyframes smallInflate {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(2);
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: .5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
 body {
     /* background-image: url("../images/splash_bg.png");
     background-size: cover;

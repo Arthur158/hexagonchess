@@ -82,7 +82,7 @@ class VisibleGameBoard {
     makeCellAvailable(position) {
         this.cells.forEach(function (el) {
             if (el.getAttribute("title") === JSON.stringify(position)) {
-                el.className += " available";
+                el.className = "available " + el.className;
                 el.style.pointerEvents = "all";
             }
         });
@@ -96,7 +96,7 @@ class VisibleGameBoard {
             let s = el.className;
 
             s = s.replace(" selected", "");
-            s = s.replace(" available", "");
+            s = s.replace("available ", "");
         
             el.className = s;
         });

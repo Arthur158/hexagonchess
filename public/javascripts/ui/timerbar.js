@@ -28,9 +28,12 @@ class TimerBar {
             currentTime = this.timerBlack;
         }
 
-        if (currentTime < 0) {
+        if (currentTime <= 0) {
             clearInterval(this.interval);
             document.getElementById(selectedCounter).innerHTML = "00:00";
+            document.getElementById(selectedCounter).style.color = "#087033";
+            document.getElementById(selectedCounter).style.animation = "blink 2s linear infinite";
+            return;
         }
 
         let minutes = Math.floor((currentTime % (1000 * 60 * 60)) / (1000 * 60));

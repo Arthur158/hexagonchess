@@ -3,6 +3,8 @@
 const websocket = require("ws");
 const { GameState } = require("./public/javascripts/gamestate");
 const { PlayerType } = require("./public/javascripts/utils");
+const messages = require("./public/javascripts/messages");
+const gameStatus = require("./statTracker");
 
 /**
  * Game constructor. Every game has two players, identified by their WebSocket.
@@ -91,6 +93,93 @@ class game {
         } else {
             this.playerBlack = p;
             return PlayerType.BLACK;
+        }
+    }
+
+    /**
+     * Starts checking if there are players who lost because their time was depleted
+     * 
+     * @param {Function} hook routine to call when a timer expires. takes as parameter the expired timer
+     */
+     startTimeChecker(hook) {
+        let ref = this;
+
+        let intv = setInterval(function() {
+            if(ref == null || ref.playerWhite == null || ref.playerBlack == null) {
+                console.log("BRUH");
+                clearInterval(intv);
+                return;
+              }
+        
+              ref.gameData.updateTimer(ref.gameData.getCurrentPlayer());
+              let expiredTimer = ref.gameData.getExpiredTimer();
+        
+              if(expiredTimer != null) {
+                hook(ref, expiredTimer);
+        
+                clearInterval(intv);
+              }
+        }, 500);
+    }
+
+    /**
+     * Announce the players of the ending of the game and the winner
+     * 
+     * @param {string} color 
+     */
+    sendWinMessage(color) {
+        let finalMsg = messages.O_GAME_OVER;
+        finalMsg.data = color;
+
+        this.playerWhite.send(JSON.stringify(finalMsg));
+        this.playerBlack.send(JSON.stringify(finalMsg));
+
+        this.setStatus(finalMsg.data);
+
+        gameStatus.gamesCompleted++;
+        
+        color == PlayerType.WHITE ? gameStatus.whiteWins++ : gameStatus.blackWins++;
+        this.sendUpdateMessage();
+
+        this.closeConnections();
+    }
+
+    /**
+     * Sends a stalemate message to both players
+     */
+    sendStalemateMessage() {
+        this.playerWhite.send(messages.S_STALEMATE);
+        this.playerBlack.send(messages.S_STALEMATE);
+
+        this.setStatus("STALEMATE");
+
+        this.closeConnections();
+    }
+
+    /**
+     * Send a game update to both players
+     */
+    sendUpdateMessage() {
+        let update = messages.O_GAME_DATA;
+        update.data = JSON.stringify(this.gameData);
+
+        this.playerWhite.send(JSON.stringify(update));
+        this.playerBlack.send(JSON.stringify(update));
+    }
+
+    closeConnections() {
+        try {
+            this.playerWhite.close();
+            this.playerWhite = null;
+        } catch (e) {
+            console.log("Closing");
+        }
+
+        try {
+            this.playerBlack.close();
+            this.playerBlack = null;
+        } catch (e) {
+            console.log("Closing");
         }
     }
 }

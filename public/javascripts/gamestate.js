@@ -231,14 +231,19 @@ class GameState {
     constructor(){
         this.gameBoard = new GameBoard();
         this.gameBoard.initializeGlinski();
-        this.whiteTimer = 1800000;
-        this.blackTimer = 1800000;
+        this.whiteTimer = 180000;
+        this.blackTimer = 180000;
         this.lastUpdated = (new Date()).getTime();
         this.turn = 0;
         this.losses = {
             white: [],
             black: [],
         }
+    }
+
+
+    getCurrentPlayer() {
+        return this.turn % 2 == 0 ? "WHITE" : "BLACK";
     }
 
     /**
@@ -285,6 +290,20 @@ class GameState {
 
         this.lastUpdated = (new Date()).getTime();
     }
+
+    /**
+     * Function that returns the corresponding color of the timer that expired
+     * or null, if no timer has expired
+     * 
+     * @returns {string|null} the corresponding color or null
+     */
+    getExpiredTimer() {
+        if(this.whiteTimer <= 0) return "WHITE";
+        if(this.blackTimer <= 0) return "BLACK";
+
+        return null;
+    }
+
 }
 
 if(module) {

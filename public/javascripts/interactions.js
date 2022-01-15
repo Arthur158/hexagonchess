@@ -80,6 +80,9 @@ class GameHandler {
     deselectPosition() {
         this.currentSelectedPosition = null;
 		this.visibleGameBoard.deselectAllCells();
+
+        this.visibleGameBoard.disableAllCells();
+        this.visibleGameBoard.enableAllCells();
     }
 
     /**
@@ -303,6 +306,9 @@ class GameHandler {
             else{
                 sb.setStatus(Status.gameLost);
             }
+
+            gh.winner = incomingMsg.data;
+            vgb.disableAllCells();
         }
     };
 

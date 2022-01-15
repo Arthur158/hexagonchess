@@ -259,7 +259,8 @@ class PositionChecker {
                 break;
             case PieceType.BISHOP:
                 if (vector.x == 0) {
-                    if (Math.abs(vector.y) == Math.abs(vector.z)) {
+                    //if (Math.abs(vector.y) == Math.abs(vector.z)) {
+                    if(vector.y == -vector.z) {
                         for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (PositionChecker.otherPieceGetter(p1.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
                                 return false;
@@ -269,9 +270,13 @@ class PositionChecker {
                     }
                 }
                 if (vector.y == 0) {
-                    if (Math.abs(vector.x) == Math.abs(vector.z)) {
+                    // if (Math.abs(vector.x) == Math.abs(vector.z)) {
+                    if(vector.x == vector.z) {
                         for (var i = 1; i <= Math.abs(vector.x)-1; i++) {
-                            if (PositionChecker.otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y, p1.z + i * Math.abs(vector.z) / vector.z, board) != null) {
+                            // console.log([p1.x + i * Math.sign(vector.x), p1.y, p1.z + i * Math.sign(vector.z)]);
+                            // console.log(PositionChecker.otherPieceGetter(p1.x + i * Math.sign(vector.x), p1.y, p1.z + i * Math.sign(vector.z), board));
+                            
+                            if (PositionChecker.otherPieceGetter(p1.x + i * Math.sign(vector.x), p1.y, p1.z + i * Math.sign(vector.z), board) != null) {
                                 return false;
                             }
                         }
@@ -280,7 +285,8 @@ class PositionChecker {
 
                 }
                 if (vector.z == 0) {
-                    if (Math.abs(vector.y) == Math.abs(vector.x)) {
+                    //if (Math.abs(vector.y) == Math.abs(vector.x)) {
+                    if(vector.y == vector.x) {
                         for (var i = 1; i <= Math.abs(vector.y)-1; i++) {
                             if (PositionChecker.otherPieceGetter(p1.x + i * Math.abs(vector.x) / vector.x, p1.y + i * Math.abs(vector.y) / vector.y, p1.z, board) != null) {
                                 return false;
