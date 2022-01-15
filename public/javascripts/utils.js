@@ -111,6 +111,14 @@ class PositionChecker {
             return false;
         }
 
+        let simulation=board.copyGameBoard();
+
+        simulation.movePiece(p1,p2);
+
+        if(PositionChecker.isKingChecked(pieceStartingPosition.color,simulation)){
+            return false;
+        }
+
         // creates a vector representing the wanted movement of the piece
         let vector = new Position(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
 
@@ -391,21 +399,15 @@ class PositionChecker {
         return isChecked;
     }
 
-    static isKingCheckMated(color,GameState){
-        board=GameState.GameBoard;
+    static isKingCheckMated(color,board){
         if(!PositionChecker.isKingChecked(color,board))return false;
 		let allPositions = PositionChecker.getAllPositions();
-        checkCanBeCountered=false;
+        let checkCanBeCountered=false;
         allPositions.forEach(function(e){
-            if(e.getPieceAtPosition()!=null&&e.getPieceAtPosition()[1]==color){
+            if(board.getPieceAtPosition(e)!=null&&board.getPieceAtPosition(e)[1]==color){
                 allPositions.forEach(function(f){
-                    simulation=GameState.copyGameState();
-                    if(PositionChecker.checkPosition(e, f, simulation.GameBoard)){
-                        simulation.performMove(e, f);
-                        if(!PositionChecker.isKingChecked(color, simulation.GameBoard)){
+                    if(PositionChecker.checkPosition(e,f,board)){
                             checkCanBeCountered=true;
-                        }
-
                     }
                 })
             }

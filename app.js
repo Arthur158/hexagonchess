@@ -139,14 +139,7 @@ wss.on("connection", function connection(ws) {
 
         let legalMove = PositionChecker.checkPosition(p1, p2, gameObjData.gameBoard);
 
-        let simulation=gameObjData.copyGameState();
-
-        simulation.performMove(p1,p2);
-
-        let noCheck = !(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK, simulation.gameBoard));
-        
-
-        if (!onBoardMove || !goodColor || !legalMove || !noCheck ) {
+        if (!onBoardMove || !goodColor || !legalMove) {
           isPlayerWhite ? gameObj.playerWhite.send(messages.S_ILLEGAL_MOVE) 
                         : gameObj.playerBlack.send(messages.S_ILLEGAL_MOVE);
 
@@ -163,8 +156,10 @@ wss.on("connection", function connection(ws) {
         console.log(`[GAME ${gameObj.id}][DEBUG] Performed ${p1.toString()}:${p2.toString()}`);
         gameObjData.updateTimer(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
 
+        let checkedPlayer=false;
+
         if(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
-            if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData)){
+            if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
                 let gameOverMsg = messages.O_GAME_OVER;
                 gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
                 gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
@@ -172,6 +167,7 @@ wss.on("connection", function connection(ws) {
                 gameObj.setStatus(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
                 return;
             }
+            checkedPlayer=true;
             let check=messages.O_CHECK;
             if(isPlayerWhite){
               gameObj.playerBlack.send(JSON.stringify(check));
@@ -201,12 +197,16 @@ wss.on("connection", function connection(ws) {
         gameObj.playerBlack.send(JSON.stringify(update));
 
         if(isPlayerWhite) {
-          gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
+          if(!checkedPlayer){
+            gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
+          }
           gameObj.playerWhite.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("BLACK MOVES");
         }
         else {
-          gameObj.playerWhite.send(messages.S_MAKE_A_MOVE);
+          if(!checkedPlayer){
+            gameObj.playerWhite.send(messages.S_MAKE_A_MOVE);
+          }
           gameObj.playerBlack.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("WHITE MOVES");
         }

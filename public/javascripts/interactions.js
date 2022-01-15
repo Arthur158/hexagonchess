@@ -272,6 +272,10 @@ class GameHandler {
             }
 		}
 
+        if(incomingMsg.type == Messages.T_CHECK) {
+            
+        }
+
         if(incomingMsg.type == Messages.T_GAME_OVER) {
             tb.pauseCounting(PlayerType.WHITE);
             tb.pauseCounting(PlayerType.BLACK);

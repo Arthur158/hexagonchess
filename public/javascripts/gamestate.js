@@ -73,6 +73,7 @@ class GameBoard {
         this.cells[1][4] = new BoardCell("ROOK","WHITE");
         this.cells[6][1] = new BoardCell("ROOK","WHITE");
         this.cells[5][4] = new BoardCell("BISHOP","WHITE");
+        this.cells[5][5] = new BoardCell("KING","WHITE");
     }
 
     copyGameBoard(){
@@ -87,6 +88,7 @@ class GameBoard {
                 }
             }
         }
+        return result;
     }
 
     getCoordinates(boardCell){
@@ -237,12 +239,6 @@ class GameState {
             white: [],
             black: [],
         }
-    }
-
-    copyGameState(){
-        let result=new GameState();
-        result.gameBoard=this.gameBoard.copyGameBoard();
-        return result;
     }
 
     /**
