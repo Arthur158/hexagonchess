@@ -16,4 +16,6 @@
     gameLost: "Oh no, you lost!",
     notNice: "That is not very nice!",
     waitingServer: "Waiting for server to respond...",
+    stalemate: "The game ended on a stalemate.",
+    check: "Check!"
   };

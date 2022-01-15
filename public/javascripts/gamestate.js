@@ -68,6 +68,51 @@ class GameBoard {
         }
     }
 
+    initializeStalemateOrCheckmateOrCheck() {
+        this.cells[0][0] = new BoardCell("KING","BLACK");
+        this.cells[1][4] = new BoardCell("ROOK","WHITE");
+        this.cells[6][1] = new BoardCell("ROOK","WHITE");
+        this.cells[5][4] = new BoardCell("BISHOP","WHITE");
+        this.cells[5][5] = new BoardCell("KING","WHITE");
+    }
+
+    copyGameBoard(){
+        let result=new GameBoard();
+        for(let i=0;i<this.cells.length;i++){
+            for(let j=0;j<this.cells[i].length;j++){
+                if(this.cells[i][j]==null){
+                    result.cells[i][j]=null;
+                }
+                else{
+                    result.cells[i][j]=new BoardCell(this.cells[i][j].pieceType,this.cells[i][j].color)
+                }
+            }
+        }
+        return result;
+    }
+
+    getCoordinates(boardCell){
+        let count1=0;
+        let count2=0;
+        for(let i=0;i<this.cells.length;i++){
+            if(this.cells[i].includes(boardCell)){
+                for(let j=0;i<cells[i].length;j++){
+                    if(this.cells[i][j]===e){
+                        return [count1,count2];
+                    }
+                    else{
+                        count2++
+                    }
+                }
+                return [-1,-1];
+            }
+            else{
+                count1++;
+            }
+        }
+        return [-1,-1];
+    }
+
     /**
      * Put the specified piece of color at the requested position on the board (does not do checking)
      * 
@@ -92,7 +137,7 @@ class GameBoard {
 
         let cell = this.cells[newCoords.level][newCoords.file];
 
-        if(cell.pieceType != null) return [cell.pieceType, cell.color];
+        if(cell!= null &&cell.pieceType != null) return [cell.pieceType, cell.color];
     
         return null;
     }
@@ -117,6 +162,19 @@ class GameBoard {
 
 
             return overriden;
+        }
+
+        return null;
+    }
+
+    getKingCoordinates(color) {
+        for(let i = 0; i < this.cells.length; i++){
+            for(let j = 0; j < this.cells[i].length; j++){
+                let curr = this.cells[i][j];
+                if(curr != null && curr.pieceType == "KING" && curr.color == color) {
+                    return {level: i, file: j};
+                }
+            }
         }
 
         return null;
@@ -162,6 +220,8 @@ class GameBoard {
 
         return {file: file, level: level};
     }
+
+    
 }
 
 /**

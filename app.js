@@ -10,7 +10,7 @@ const messages = require("./public/javascripts/messages");
 
 const gameStatus = require("./statTracker");
 const Game = require("./game");
-const { PlayerType, PositionChecker, Position } = require("./public/javascripts/utils");
+const { PlayerType, PositionChecker, Position, Color } = require("./public/javascripts/utils");
 const { blackWins } = require("./statTracker");
 
 if(process.argv.length < 3) {
@@ -133,7 +133,7 @@ wss.on("connection", function connection(ws) {
         let data = JSON.parse(oMsg.data);
 
         let p1 = Position.fromObj(data.p1);
-        let p2 = Position.fromObj(data.p2)
+        let p2 = Position.fromObj(data.p2);
 
         let onBoardMove = PositionChecker.isPositionOnBoard(p1) && 
                           PositionChecker.isPositionOnBoard(p2);
@@ -159,15 +159,19 @@ wss.on("connection", function connection(ws) {
         console.log(`[GAME ${gameObj.id}][DEBUG] Performed ${p1.toString()}:${p2.toString()}`);
         gameObjData.updateTimer(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
 
-        if(false) {
-          // check for win conditions
-          let gameOverMsg = messages.O_GAME_OVER;
-          gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
-          gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
-          gameObj.playerBlack.send(JSON.stringify(gameOverMsg));
+        let checkedPlayer=false;
+		let checkmate = false;
+		let stalemate = false;
 
-          gameObj.setStatus(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
-          return;
+        if(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
+            if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
+                checkmate = true;
+            }
+            checkedPlayer=true;
+        }
+        else if(PositionChecker.isStaleMate(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)) {
+          // check for stalemate
+		  stalemate = true;
         }
 
         gameObjData.turn++;
@@ -178,15 +182,38 @@ wss.on("connection", function connection(ws) {
         gameObj.playerWhite.send(JSON.stringify(update));
         gameObj.playerBlack.send(JSON.stringify(update));
 
+		if(checkmate) {
+			let gameOverMsg = messages.O_GAME_OVER;
+			gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
+			gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
+			gameObj.playerBlack.send(JSON.stringify(gameOverMsg));
+			gameObj.setStatus(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
+
+			return
+		}
+
+		if(stalemate) {
+			gameObj.playerWhite.send(messages.S_STALEMATE);
+			gameObj.playerBlack.send(messages.S_STALEMATE);
+  
+			gameObj.setStatus("STALEMATE");
+
+			return;
+		}
+
         if(isPlayerWhite) {
           gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
           gameObj.playerWhite.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("BLACK MOVES");
+
+          if(checkedPlayer) gameObj.playerBlack.send(messages.S_CHECK);
         }
         else {
           gameObj.playerWhite.send(messages.S_MAKE_A_MOVE);
           gameObj.playerBlack.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("WHITE MOVES");
+        
+          if(checkedPlayer) gameObj.playerWhite.send(messages.S_CHECK);
         }
 
       }

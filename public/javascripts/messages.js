@@ -82,6 +82,12 @@
     data: null,
   };
 
+  exports.O_STALEMATE = {
+    type: exports.T_GAME_OVER,
+    data: "stalemate"
+  }
+  exports.S_STALEMATE = JSON.stringify(exports.O_STALEMATE);
+
   /**
    * Players to server
    */  
@@ -97,6 +103,12 @@
     type: exports.T_RESIGNED,
     data: null,
   }
+  
+  exports.T_CHECK = "CHECK";
+  exports.O_CHECK = {
+    type: exports.T_CHECK,
+  }
+  exports.S_CHECK = JSON.stringify(exports.O_CHECK);
 
 
 })(typeof exports === "undefined" ? (this.Messages = {}) : exports);
