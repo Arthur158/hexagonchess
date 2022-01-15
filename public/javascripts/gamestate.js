@@ -75,6 +75,15 @@ class GameBoard {
         this.cells[5][4] = new BoardCell("BISHOP","WHITE");
     }
 
+    copyGameBoard(board){
+        result=new GameBoard();
+        for(let i=0;i<board.cells.length;i++){
+            for(let j=0;j<board.cells[i].length;j++){
+                result.cells[i][j]=new BoardCell(board.cells[i][j].pieceType,board.cells[i][j].color)
+            }
+        }
+    }
+
     getCoordinates(boardCell){
         let count1=0;
         let count2=0;
