@@ -177,14 +177,40 @@ body {
     width: 50%;
 }
 
+/* For the status display */
 #status {
     position: absolute;
 
     bottom: 0;
     left: 30%;
 
+    height: 80px;
+
     color: black;
-    font-size: 4vh;
+    font-size: 2.5em;
+}
+
+#color {
+    position: absolute;
+    bottom: 82px;
+    left: 30%;
+
+    height: 40px;
+
+    font-size: 1.3em;
+}
+
+#color span {
+    vertical-align: top;
+    height: 70%;
+    display: inline-block;
+    padding-top: 10px;
+}
+
+#color img {
+    height: 70%;
+    display: inline-block;
+    padding-top: 5px;
 }
 
 #gameTitle {

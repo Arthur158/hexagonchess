@@ -19,5 +19,8 @@ class StatusBar {
      */
     setColor(color) {
         document.getElementById("playerColor").innerHTML = color;
+        if(color == "BLACK"){
+            document.getElementById("colorDot").src = 'images/blackColor.png';
+        }
     }
 }
