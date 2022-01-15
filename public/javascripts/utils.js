@@ -367,77 +367,110 @@ class PositionChecker {
     }
 
     static isKingChecked(color, board){
-        let king=new Position(0,0,0);
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                if (board.cells[i][j]!=null&&board.cells[i][j][1]==color&&board.cells[i][j][0]==PieceType.KING){
-                    let king=Position.fromHexCoords(i,j);
-                }
-            }
-        }
-     
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                if(board.cells[i][j]!=null&&board.cells[i][j][1]!=color&&PositionChecker.checkPosition(Position.fromHexCoords(i,j),king,board)){
-                    return true;
-                }
-            }
-        return false;
-        }
+		let kingCoord = board.getKingCoordinates(color);
+
+		if(kingCoord == null) return false;
+
+		console.log(kingCoord);
+
+        let king = Position.fromHexCoords(kingCoord.file, kingCoord.level);
+		let allPositions = PositionChecker.getAllPositions();
+		console.log(king);
+
+		let isChecked = false;
+
+		allPositions.forEach(function(p) {
+			let currPiece = board.getPieceAtPosition(p);
+
+			if(currPiece != null && currPiece[1] != color && PositionChecker.checkPosition(p,king,board)) {
+				isChecked = true;
+				return;
+			}
+		});
+
+        return isChecked;
     }
 
     static isPositionChecked(color,board,position){
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                console.log(Position.fromHexCoords(i,j));
-                if(board.cells[i][j]!=null&&board.cells[i][j][1]!=color&&PositionChecker.checkPosition(Position.fromHexCoords(i,j),position,board)){
-                    return true;
-                }
-            }
-        }
+        // for(let i=0;i<board.cells.length;i++){
+        //     for(let j=0;j<board.cells[i].length;j++){
+        //         console.log(Position.fromHexCoords(i,j));
+        //         if(board.cells[i][j]!=null&&board.cells[i][j].color!=color&&PositionChecker.checkPosition(Position.fromHexCoords(i,j),position,board)){
+        //             return true;
+        //         }
+        //     }
+        // }
         return false;
     }
 
     static isKingCheckMated(color,board){
-        if(!isKingChecked(color,board))return false;
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                if (board.cells[i][j]!=null&&board.cells[i][j][1]==color&&e.getPieceAtPosition[0]==PieceType.KING){
-                    king=e;
-                }
-            }
-        }
-        if(color==Color.WHITE){otherColor=Color.BLACK;}
-        else{otherColor=Color.WHITE;}
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                if(PositionChecker.checkPosition(king,Position.fromHexCoords(i,j),board)){
-                    if(!isPositionChecked(color,board,Position.fromHexCoords(i,j))){
-                        return false;
-                    }   
-                }    
-            }
-        }
-        return true;
+        // if(!isKingChecked(color,board))return false;
+        // for(let i=0;i<board.cells.length;i++){
+        //     for(let j=0;j<board.cells[i].length;j++){
+        //         if (board.cells[i][j]!=null&&board.cells[i][j][1]==color&&e.getPieceAtPosition[0]==PieceType.KING){
+        //             king=e;
+        //         }
+        //     }
+        // }
+        // if(color==Color.WHITE){otherColor=Color.BLACK;}
+        // else{otherColor=Color.WHITE;}
+        // for(let i=0;i<board.cells.length;i++){
+        //     for(let j=0;j<board.cells[i].length;j++){
+        //         if(PositionChecker.checkPosition(king,Position.fromHexCoords(i,j),board)){
+        //             if(!isPositionChecked(color,board,Position.fromHexCoords(i,j))){
+        //                 return false;
+        //             }   
+        //         }    
+        //     }
+        // }
+        return false;
 
     }
 
+	/**
+	 * Function that checks if the match is in a stalemate for the selected color
+	 * 
+	 * @param {string} color 
+	 * @param {GameBoard} board 
+	 * @returns {boolean}
+	 */
     static isStaleMate(color,board){
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                if(board.cells[i][j]!=null&&board.cells[i][j][1]==color){
-                    for(let k=0;k<board.cells.length;k++){
-                        for(let l=0;l<board.cells[k].length;l++){
-                            if(PositionChecker.checkPosition(Position.fromHexCoords(i,j),Position.fromHexCoords(k,l),board)){
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+		let allPositions = PositionChecker.getAllPositions();
+		
+		let isStaleMate = true;
+
+		allPositions.forEach(function(startPos) {
+			if(board.getPieceAtPosition(startPos) != null && board.getPieceAtPosition(startPos)[1] == color) {
+				allPositions.forEach(function(endPos) {
+					if(PositionChecker.checkPosition(startPos, endPos, board)){
+						isStaleMate = false;
+						return;
+					}
+				});
+			}
+			if(!isStaleMate) return;
+		});
+
+        return isStaleMate;
     }
+
+
+	/**
+	* Functions that returns an array of all valid positions on the board
+	* 
+	* @returns {Array} all the positions
+	*/
+   	static getAllPositions() {
+	   let arr = [];
+
+	   for(let i = 0; i < 11; i++) { // level
+		   for(let j = Math.max(0, i - 5); j < Math.min(11, 16- i); j++) { // file
+			   arr.push(Position.fromHexCoords(j, i));
+		   }
+	   }
+
+	   return arr;
+   }
 }
 if (module) {
     module.exports.Color = Color;

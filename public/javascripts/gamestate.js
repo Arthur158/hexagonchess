@@ -160,6 +160,19 @@ class GameBoard {
         return null;
     }
 
+    getKingCoordinates(color) {
+        for(let i = 0; i < this.cells.length; i++){
+            for(let j = 0; j < this.cells[i].length; j++){
+                let curr = this.cells[i][j];
+                if(curr != null && curr.pieceType == "KING" && curr.color == color) {
+                    return {level: i, file: j};
+                }
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Updates the cells based on provided object
      * 
@@ -201,22 +214,7 @@ class GameBoard {
         return {file: file, level: level};
     }
 
-    /**
-     * Functions that returns an array of all valid positions on the board
-     * 
-     * @returns {Array} all the positions
-     */
-    static getAllPositions() {
-        let arr = [];
-
-        for(let i = 0; i < 11; i++) { // level
-            for(let j = Math.max(0, i - 5); j < Math.min(11, 16 - i); j++) { // file
-                arr.push(Position.fromHexCoords(j, i));
-            }
-        }
-
-        return arr;
-    }
+    
 }
 
 /**
