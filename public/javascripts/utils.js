@@ -391,39 +391,26 @@ class PositionChecker {
         return isChecked;
     }
 
-    static isPositionChecked(color,board,position){
-        // for(let i=0;i<board.cells.length;i++){
-        //     for(let j=0;j<board.cells[i].length;j++){
-        //         console.log(Position.fromHexCoords(i,j));
-        //         if(board.cells[i][j]!=null&&board.cells[i][j].color!=color&&PositionChecker.checkPosition(Position.fromHexCoords(i,j),position,board)){
-        //             return true;
-        //         }
-        //     }
-        // }
-        return false;
-    }
+    static isKingCheckMated(color,GameState){
+        board=GameState.GameBoard;
+        if(!PositionChecker.isKingChecked(color,board))return false;
+		let allPositions = PositionChecker.getAllPositions();
+        checkCanBeCountered=false;
+        allPositions.forEach(function(e){
+            if(e.getPieceAtPosition()!=null&&e.getPieceAtPosition()[1]==color){
+                allPositions.forEach(function(f){
+                    simulation=GameState.copyGameState();
+                    if(PositionChecker.checkPosition(e, f, simulation.GameBoard)){
+                        simulation.performMove(e, f);
+                        if(!PositionChecker.isKingChecked(color, simulation.GameBoard)){
+                            checkCanBeCountered=true;
+                        }
 
-    static isKingCheckMated(color,board){
-        // if(!isKingChecked(color,board))return false;
-        // for(let i=0;i<board.cells.length;i++){
-        //     for(let j=0;j<board.cells[i].length;j++){
-        //         if (board.cells[i][j]!=null&&board.cells[i][j][1]==color&&e.getPieceAtPosition[0]==PieceType.KING){
-        //             king=e;
-        //         }
-        //     }
-        // }
-        // if(color==Color.WHITE){otherColor=Color.BLACK;}
-        // else{otherColor=Color.WHITE;}
-        // for(let i=0;i<board.cells.length;i++){
-        //     for(let j=0;j<board.cells[i].length;j++){
-        //         if(PositionChecker.checkPosition(king,Position.fromHexCoords(i,j),board)){
-        //             if(!isPositionChecked(color,board,Position.fromHexCoords(i,j))){
-        //                 return false;
-        //             }   
-        //         }    
-        //     }
-        // }
-        return false;
+                    }
+                })
+            }
+        })
+        return !checkCanBeCountered;
 
     }
 

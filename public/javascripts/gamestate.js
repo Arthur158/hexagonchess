@@ -75,11 +75,16 @@ class GameBoard {
         this.cells[5][4] = new BoardCell("BISHOP","WHITE");
     }
 
-    copyGameBoard(board){
-        result=new GameBoard();
-        for(let i=0;i<board.cells.length;i++){
-            for(let j=0;j<board.cells[i].length;j++){
-                result.cells[i][j]=new BoardCell(board.cells[i][j].pieceType,board.cells[i][j].color)
+    copyGameBoard(){
+        let result=new GameBoard();
+        for(let i=0;i<this.cells.length;i++){
+            for(let j=0;j<this.cells[i].length;j++){
+                if(this.cells[i][j]==null){
+                    result.cells[i][j]=null;
+                }
+                else{
+                    result.cells[i][j]=new BoardCell(this.cells[i][j].pieceType,this.cells[i][j].color)
+                }
             }
         }
     }
@@ -232,6 +237,12 @@ class GameState {
             white: [],
             black: [],
         }
+    }
+
+    copyGameState(){
+        let result=new GameState();
+        result.gameBoard=this.gameBoard.copyGameBoard();
+        return result;
     }
 
     /**

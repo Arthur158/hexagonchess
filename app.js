@@ -139,10 +139,14 @@ wss.on("connection", function connection(ws) {
 
         let legalMove = PositionChecker.checkPosition(p1, p2, gameObjData.gameBoard);
 
-        let noCheck = !(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK, gameObjData.gameBoard));
+        let simulation=gameObjData.copyGameState();
+
+        simulation.performMove(p1,p2);
+
+        let noCheck = !(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK, simulation.gameBoard));
         
 
-        if (!onBoardMove || !goodColor || !legalMove || !noCheck) {
+        if (!onBoardMove || !goodColor || !legalMove || !noCheck ) {
           isPlayerWhite ? gameObj.playerWhite.send(messages.S_ILLEGAL_MOVE) 
                         : gameObj.playerBlack.send(messages.S_ILLEGAL_MOVE);
 
@@ -160,7 +164,7 @@ wss.on("connection", function connection(ws) {
         gameObjData.updateTimer(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
 
         if(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
-            if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
+            if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData)){
                 let gameOverMsg = messages.O_GAME_OVER;
                 gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
                 gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
