@@ -1,15 +1,4 @@
-@font-face {
-    font-family: Nemoy;
-    font-weight: lighter;
-    src: url("../fonts/nemoy.light.ttf");
-}
-
-body {
-    background-color: #d5d6e9;
-
-    font-family: Montserrat, sans-serif;
-    font-family: 1.4em;
-}
+@import url("main.css");
 
 .timer {
     height: 50px;
