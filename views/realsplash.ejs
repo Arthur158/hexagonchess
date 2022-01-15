@@ -7,6 +7,8 @@
 
       <link rel="stylesheet" href="stylesheets/splash.css">
 
+      <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
       <title>Delft Hexagon Chess</title>
    </head>
    <body>
@@ -37,10 +39,22 @@
          </span>
       </section>
 
-      <div id="playBtn" onclick="window.location.href = 'play'">
+      <div id="playBtn" onclick="play();">
          <img src="images/button_hexagons.png" class="rotateIn">
          <span>Play</span>
       </div>
+
+      <script>
+         function play() {
+            document.getElementById("playBtn").style.backgroundPosition = "50%";
+            const clickSound = new Audio("../data/click.wav");
+            clickSound.play();
+
+            setTimeout(function() {
+               window.location.href = "play";
+            }, 1000);
+         }
+      </script>
    </body>
 </html>
 

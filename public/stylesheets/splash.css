@@ -4,17 +4,43 @@
     src: url("../fonts/nemoy.light.ttf");
 }
 
+@keyframes fromLeft {
+    0% {
+        right: -30%;
+    }
+    100% {
+        right: 7%;
+    }
+}
+
+@keyframes fromBottom {
+    0% {
+        bottom: -30%;
+    }
+    100% {
+        bottom: 5%;
+    }
+}
 
 @keyframes breathe {
     0% {
         opacity: 1;
     }
     50% {
-        opacity: 0.8;
+        opacity: 0.6;
     }
     100% {
         opacity: 1;
     }
+ }
+
+ @keyframes shiftGradient {
+     0% {
+        background-color: linear-gradient(90deg, rgba(49,39,131,0.0) 22%, rgba(49,39,131,1) 100%)
+     }
+     100% {
+        background: linear-gradient(90deg, rgba(49,39,131,0.0) 0%, rgba(49,39,131,1) 60%);
+     }
  }
 
 body {
@@ -28,6 +54,12 @@ body {
     font-family: 1.4em;
 
     cursor: default;
+
+    overflow: hidden;
+}
+
+::selection {
+    background: transparent;
 }
 
 #splashimg {
@@ -48,6 +80,9 @@ body {
 
     position: absolute;
     right: 7%;
+
+    animation: fromLeft 1s cubic-bezier(0.1, 1, 1, 1);
+    animation-iteration-count: 1;
 }
 
 #credits {
@@ -76,7 +111,10 @@ body {
 
     color: #e8e8e8;
     background: rgb(49,39,131);
-    background: linear-gradient(90deg, rgba(49,39,131,0.0) 22%, rgba(49,39,131,1) 100%);
+    background: linear-gradient(90deg, rgba(49,39,131,0.0) 7%, rgba(49,39,131,1) 30%, rgba(49,39,131,1) 100%);
+    background-size: 300% 100%;
+    background-position: 0;
+    transition: background-position 3s;
 
     border-right: solid 3px black;
 }
@@ -86,7 +124,7 @@ body {
 }
 
 #playBtn:active {
-    background: linear-gradient(90deg, rgba(49,39,131,0.0) 0%, rgba(49,39,131,1) 60%);
+    background-position: 50%;
 }
 
 #playBtn span {
@@ -130,6 +168,9 @@ body {
     grid-template-columns: 1fr;
     grid-gap: 30px;
 
+    animation: fromBottom 1s;
+    animation-iteration-count: 1;
+    animation-timing-function: cubic-bezier(0.1, 1, 1, 1);
 }
 
 #statSection span {
