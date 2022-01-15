@@ -273,16 +273,16 @@ class GameHandler {
 		}
 
         if(incomingMsg.type == Messages.T_CHECK) {
-            
+            sb.setStatus(Status.check);
         }
 
         if(incomingMsg.type == Messages.T_GAME_OVER) {
             tb.pauseCounting(PlayerType.WHITE);
             tb.pauseCounting(PlayerType.BLACK);
-            if(incomingMsg.data="stalemate"){
+            if(incomingMsg.data == "stalemate"){
                 sb.setStatus(Status.stalemate);
             }
-            else if(incomingMsg.data==gh.playerType){
+            else if(incomingMsg.data == gh.playerType){
                 sb.setStatus(Status.gameWon)
             }
             else{

@@ -104,10 +104,11 @@
     data: null,
   }
   
-  exports.T_CHECK="CHECK";
-  exports.O_CHECK={
-    type: exports.O_CHECK,
+  exports.T_CHECK = "CHECK";
+  exports.O_CHECK = {
+    type: exports.T_CHECK,
   }
+  exports.S_CHECK = JSON.stringify(exports.O_CHECK);
 
 
 })(typeof exports === "undefined" ? (this.Messages = {}) : exports);

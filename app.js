@@ -157,35 +157,18 @@ wss.on("connection", function connection(ws) {
         gameObjData.updateTimer(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
 
         let checkedPlayer=false;
+		let checkmate = false;
+		let stalemate = false;
 
         if(PositionChecker.isKingChecked(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
             if(PositionChecker.isKingCheckMated(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)){
-                let gameOverMsg = messages.O_GAME_OVER;
-                gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
-                gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
-                gameObj.playerBlack.send(JSON.stringify(gameOverMsg));
-                gameObj.setStatus(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
-                return;
+                checkmate = true;
             }
             checkedPlayer=true;
-            let check=messages.O_CHECK;
-            if(isPlayerWhite){
-              gameObj.playerBlack.send(JSON.stringify(check));
-            }
-            else{
-              gameObj.playerWhite.send(JSON.stringify(check));
-            }
-            
-            return;
         }
-
-        if(PositionChecker.isStaleMate(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)) {
+        else if(PositionChecker.isStaleMate(isPlayerWhite ? PlayerType.BLACK : PlayerType.WHITE, gameObjData.gameBoard)) {
           // check for stalemate
-          gameObj.playerWhite.send(messages.S_STALEMATE);
-          gameObj.playerBlack.send(messages.S_STALEMATE);
-
-          gameObj.setStatus("STALEMATE");
-          return;
+		  stalemate = true;
         }
 
         gameObjData.turn++;
@@ -196,19 +179,38 @@ wss.on("connection", function connection(ws) {
         gameObj.playerWhite.send(JSON.stringify(update));
         gameObj.playerBlack.send(JSON.stringify(update));
 
+		if(checkmate) {
+			let gameOverMsg = messages.O_GAME_OVER;
+			gameOverMsg.data = isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK;
+			gameObj.playerWhite.send(JSON.stringify(gameOverMsg));
+			gameObj.playerBlack.send(JSON.stringify(gameOverMsg));
+			gameObj.setStatus(isPlayerWhite ? PlayerType.WHITE : PlayerType.BLACK);
+
+			return
+		}
+
+		if(stalemate) {
+			gameObj.playerWhite.send(messages.S_STALEMATE);
+			gameObj.playerBlack.send(messages.S_STALEMATE);
+  
+			gameObj.setStatus("STALEMATE");
+
+			return;
+		}
+
         if(isPlayerWhite) {
-          if(!checkedPlayer){
-            gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
-          }
+          gameObj.playerBlack.send(messages.S_MAKE_A_MOVE);
           gameObj.playerWhite.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("BLACK MOVES");
+
+          if(checkedPlayer) gameObj.playerBlack.send(messages.S_CHECK);
         }
         else {
-          if(!checkedPlayer){
-            gameObj.playerWhite.send(messages.S_MAKE_A_MOVE);
-          }
+          gameObj.playerWhite.send(messages.S_MAKE_A_MOVE);
           gameObj.playerBlack.send(messages.S_WAIT_FOR_TURN);
           gameObj.setStatus("WHITE MOVES");
+        
+          if(checkedPlayer) gameObj.playerWhite.send(messages.S_CHECK);
         }
 
       }

@@ -230,7 +230,7 @@ class GameBoard {
 class GameState {
     constructor(){
         this.gameBoard = new GameBoard();
-        this.gameBoard.initializeStalemateOrCheckmateOrCheck();
+        this.gameBoard.initializeGlinski();
         this.whiteTimer = 1800000;
         this.blackTimer = 1800000;
         this.lastUpdated = (new Date()).getTime();

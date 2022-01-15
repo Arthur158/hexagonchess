@@ -115,7 +115,7 @@ class PositionChecker {
 
         simulation.movePiece(p1,p2);
 
-        if(PositionChecker.isKingChecked(pieceStartingPosition.color,simulation)){
+        if(PositionChecker.isKingChecked(pieceStartingPosition[1],simulation)){
             return false;
         }
 
