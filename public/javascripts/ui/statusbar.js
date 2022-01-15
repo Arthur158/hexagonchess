@@ -10,4 +10,14 @@ class StatusBar {
     setStatus(status) {
         document.getElementById("status").innerHTML = status;
     };
+
+
+    /**
+     * Sets the display message to show the current color
+     * 
+     * @param {string} color 
+     */
+    setColor(color) {
+        document.getElementById("playerColor").innerHTML = color;
+    }
 }

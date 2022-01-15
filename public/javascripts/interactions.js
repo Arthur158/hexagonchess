@@ -12,15 +12,16 @@ class GameHandler {
 	 * @param {VisibleGameBoard} hexagonalBoard 
 	 * @param {TimerBar} timerBar 
 	 * @param {StatusBar} statusBar 
-	 * @param {number} currentTurn 
+     * @param {CapturesBar} capturesBar
 	 * @param {WebSocket} socket 
 	 */
-	constructor(initialGameState, hexagonalBoard, timerBar, statusBar, socket) {
+	constructor(initialGameState, hexagonalBoard, timerBar, statusBar, capturesBar, socket) {
         this.playerType = null;
         this.gameState = initialGameState;
         this.visibleGameBoard = hexagonalBoard;
         this.timerBar = timerBar;
         this.statusBar = statusBar;
+        this.capturesBar = capturesBar;
         this.socket = socket;
 
         this.currentSelectedPosition = null;
@@ -38,6 +39,7 @@ class GameHandler {
    */
     setPlayerType(p) {
         this.playerType = p;
+        this.statusBar.setColor(p);
     }
     /**
    * Returns the player type based on current turn
@@ -142,6 +144,9 @@ class GameHandler {
 		}
     }
 
+    /**
+     * Updates the visible board based on the current gamestate information
+     */
 	updateBoard() {
 		let currentBoard = this.gameState.gameBoard;
 
@@ -166,13 +171,21 @@ class GameHandler {
         });
 	}
 
+    /**
+     * Updates all the bar displays based on current gamestate information
+     */
 	updateBarData() {
-		let whiteTime = this.gameState.whiteTime;
-		let blackTime = this.gameState.blackTime;
+        // update timer bars
+		let whiteTime = this.gameState.whiteTimer;
+		let blackTime = this.gameState.blackTimer;
 
 		this.timerBar.setTimer(1, whiteTime);
 		this.timerBar.setTimer(2, blackTime);
-	}
+	
+        // update capture bars
+        let losses = this.gameState.losses;
+        this.capturesBar.updateLosses(losses);
+    }
 
     resignMessage() {
         let resignMessage=Messages.O_RESIGNED;
@@ -201,8 +214,9 @@ class GameHandler {
     const sb = new StatusBar();
     const tb = new TimerBar();
     const rb = new ResignButton();
+    const cb = new CapturesBar();
 
-    const gh = new GameHandler(gs, vgb, tb, sb, socket);
+    const gh = new GameHandler(gs, vgb, tb, sb, cb, socket);
     vgb.initialize(gh);
     rb.initialize(gh);
 
@@ -232,11 +246,12 @@ class GameHandler {
 
 			gh.gameState.fromObj(newState);
 
-			gh.updateBarData();
 			gh.updateBoard();
+			gh.updateBarData();
 
-            tb.setTimer(1, gh.gameState.whiteTimer);
-            tb.setTimer(2, gh.gameState.blackTimer);
+
+            // tb.setTimer(1, gh.gameState.whiteTimer);
+            // tb.setTimer(2, gh.gameState.blackTimer);
 		}
 
 		if (incomingMsg.type == Messages.T_MAKE_A_MOVE) {
@@ -291,6 +306,8 @@ class GameHandler {
     // server sends a close event only if the game was aborted from some side
     socket.onclose = function () {
         if (gh.winner == null) {
+            tb.pauseCounting(PlayerType.WHITE);
+            tb.pauseCounting(PlayerType.BLACK);
             sb.setStatus(Status["aborted"]);
         }
     };

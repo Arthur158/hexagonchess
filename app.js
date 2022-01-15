@@ -235,6 +235,10 @@ wss.on("connection", function connection(ws) {
           console.log("Player BLACK closing: " + e);
         }
       }
+      else if (gameObj.isValidTransition(gameObj.gameState, "0 JOINT")) {
+        gameObj.setStatus("0 JOINT");
+        gameObj.playerWhite = null;
+      }
     }
   });
 });
