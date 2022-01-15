@@ -111,14 +111,22 @@ class PositionChecker {
             return false;
         }
 
-        let simulation=board.copyGameBoard();
-
-        simulation.movePiece(p1,p2);
-
-        if(PositionChecker.isKingChecked(pieceStartingPosition[1],simulation)){
-            return false;
+        board.movePiece(p1,p2);
+        let isKingChecked=false
+        if(PositionChecker.isKingChecked(pieceStartingPosition[1],board)){
+            isKingChecked=true;
         }
 
+        board.movePiece(p2,p1);
+        if(pieceEndingPosition==null){
+            board.setPieceAtPosition(p2,null,null);
+        }
+        else{
+            board.setPieceAtPosition(p2,pieceEndingPosition[0],pieceEndingPosition[1]);
+        }
+        if(isKingChecked){
+            return false;
+        }
         // creates a vector representing the wanted movement of the piece
         let vector = new Position(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
 
@@ -379,11 +387,8 @@ class PositionChecker {
 
 		if(kingCoord == null) return false;
 
-		console.log(kingCoord);
-
         let king = Position.fromHexCoords(kingCoord.file, kingCoord.level);
 		let allPositions = PositionChecker.getAllPositions();
-		console.log(king);
 
 		let isChecked = false;
 
