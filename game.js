@@ -131,8 +131,8 @@ class game {
         let finalMsg = messages.O_GAME_OVER;
         finalMsg.data = color;
 
-        this.playerWhite.send(JSON.stringify(finalMsg));
-        this.playerBlack.send(JSON.stringify(finalMsg));
+        if(this.playerWhite != null) this.playerWhite.send(JSON.stringify(finalMsg));
+        if(this.playerBlack != null) this.playerBlack.send(JSON.stringify(finalMsg));
 
         this.setStatus(finalMsg.data);
 
