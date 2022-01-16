@@ -16,5 +16,5 @@
  */
 
 (function (exports) {
-  exports.WEB_SOCKET_URL = "ws://localhost:1403"; /* WebSocket URL */
+  exports.WEB_SOCKET_URL = "ws://localhost:5000" /*+ (process.env.PORT || 5000)*/; /* WebSocket URL */
 })(typeof exports === "undefined" ? (this.Setup = {}) : exports);

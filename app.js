@@ -13,7 +13,7 @@ const Game = require("./game");
 const { PlayerType, PositionChecker, Position, Color } = require("./public/javascripts/utils");
 const { blackWins } = require("./statTracker");
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 const app = express();
 
 app.set("view engine", "ejs");
