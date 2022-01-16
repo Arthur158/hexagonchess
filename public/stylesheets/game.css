@@ -266,6 +266,10 @@
     background-color: #322783;
     color: white;
 
+    z-index: 200;
+
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 #forfeitYes {
@@ -284,9 +288,9 @@
 
 }
 
-#forfeitYes:hover {
-    background-color: yellow;
-
+#forfeitYes:hover, #forfeitNo:hover {
+    background-color: #087033;
+    color: white;
 }
 
 #forfeitNo {
@@ -303,8 +307,3 @@
     font-size: 170%;
 
 }
-
-#forfeitNo:hover {
-    background-color: yellow;
-}
-

@@ -106,7 +106,6 @@ class game {
 
         let intv = setInterval(function() {
             if(ref == null || ref.playerWhite == null || ref.playerBlack == null) {
-                console.log("BRUH");
                 clearInterval(intv);
                 return;
               }

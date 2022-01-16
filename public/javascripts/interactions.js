@@ -252,13 +252,11 @@ class GameHandler {
 			gh.updateBoard();
 			gh.updateBarData();
 
-
-            // tb.setTimer(1, gh.gameState.whiteTimer);
-            // tb.setTimer(2, gh.gameState.blackTimer);
 		}
 
 		if (incomingMsg.type == Messages.T_MAKE_A_MOVE) {
 			vgb.enableAllCells();
+            rb.show();
 			sb.setStatus(Status.makeMove);
 
             if(gh.playerType == PlayerType.WHITE) {
@@ -278,6 +276,7 @@ class GameHandler {
 
 		if (incomingMsg.type == Messages.T_WAIT_FOR_TURN) {
 			vgb.disableAllCells();
+            rb.show();
 			sb.setStatus(Status.waitingTurn);
 
             tb.pauseCounting(gh.playerType);
