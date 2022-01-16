@@ -13,11 +13,7 @@ const Game = require("./game");
 const { PlayerType, PositionChecker, Position, Color } = require("./public/javascripts/utils");
 const { blackWins } = require("./statTracker");
 
-if(process.argv.length < 3) {
-  console.log("Error: expected a port as argument (eg. 'node app.js 3000').");
-  process.exit(1);
-}
-const port = process.argv[2];
+const port = process.env.PORT || 5000;
 const app = express();
 
 app.set("view engine", "ejs");
