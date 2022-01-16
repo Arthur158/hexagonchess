@@ -205,13 +205,15 @@ class GameHandler {
     /**
      * Constantly ping websocket so that we do not get a timeout
      */
-    function noop() {}
-    const ping = function() {
-        socket.ping(noop);
+    function heartbeat() {
+        if (!socket) return;
+        if (socket.readyState !== 1) return;
+        socket.send("heartbeat");
+        setTimeout(heartbeat, 2000);
     }
-    
-    setInterval(ping, 30000);
 
+    heartbeat();
+    
     /*
    * initialize all UI elements of the game:
    * - visible game board (i.e the actual hexagons that represent the board)
