@@ -215,16 +215,16 @@ wss.on("connection", function connection(ws) {
      * code 1001 means almost always closing initiated by the client;
      * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
      */
-    console.log(`${con["id"]} disconnected ...`);
+    console.log(`${con["id"]} disconnected, status ${code}`);
 
     gameStatus.onlinePlayers--;
 
-    if (code == 1001) {
-      /*
-       * if possible, abort the game; if not, the game is already completed
-       */
-      const gameObj = websockets[con["id"]];
+    /*
+      * if possible, abort the game; if not, the game is already completed
+      */
+    const gameObj = websockets[con["id"]];
 
+    if (code == 1001) {
       if (gameObj.isValidTransition(gameObj.gameState, "ABORTED")) {
         gameObj.setStatus("ABORTED");
         gameStatus.gamesAborted++;
@@ -247,10 +247,11 @@ wss.on("connection", function connection(ws) {
           console.log("Player BLACK closing: " + e);
         }
       }
-      else if (gameObj.isValidTransition(gameObj.gameState, "0 JOINT")) {
-        gameObj.setStatus("0 JOINT");
-        gameObj.playerWhite = null;
-      }
+    }
+
+    if (gameObj.isValidTransition(gameObj.gameState, "0 JOINT")) {
+      gameObj.setStatus("0 JOINT");
+      gameObj.playerWhite = null;
     }
   });
 });
