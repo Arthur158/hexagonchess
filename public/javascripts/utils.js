@@ -98,7 +98,7 @@ class PositionChecker {
      * @param {Position} p2
      * @param {GameBoard} board
      */
-    static checkPosition(p1, p2, board) { // board.getPieceAtPosition(Position) -> {PieceType, color} | null
+    static checkPosition(p1, p2, board, checkForChecks = true) { // board.getPieceAtPosition(Position) -> {PieceType, color} | null
         let pieceStartingPosition = board.getPieceAtPosition(p1);
         let pieceEndingPosition = board.getPieceAtPosition(p2);
 
@@ -113,7 +113,7 @@ class PositionChecker {
 
         board.movePiece(p1,p2);
         let isKingChecked=false
-        if(PositionChecker.isKingChecked(pieceStartingPosition[1],board)){
+        if(checkForChecks && PositionChecker.isKingChecked(pieceStartingPosition[1],board)){
             isKingChecked=true;
         }
 
@@ -401,7 +401,7 @@ class PositionChecker {
 		allPositions.forEach(function(p) {
 			let currPiece = board.getPieceAtPosition(p);
 
-			if(currPiece != null && currPiece[1] != color && PositionChecker.checkPosition(p,king,board)) {
+			if(currPiece != null && currPiece[1] != color && PositionChecker.checkPosition(p,king,board, false)) {
 				isChecked = true;
 				return;
 			}
