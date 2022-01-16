@@ -16,5 +16,5 @@
  */
 
 (function (exports) {
-  exports.WEB_SOCKET_URL = "ws://localhost:5000" /*+ (process.env.PORT || 5000)*/; /* WebSocket URL */
+  exports.WEB_SOCKET_URL = "ws://hexagonchess.herokuapp.com/" /*+ (process.env.PORT || 5000)*/; /* WebSocket URL */
 })(typeof exports === "undefined" ? (this.Setup = {}) : exports);
