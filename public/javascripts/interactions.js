@@ -205,6 +205,7 @@ class GameHandler {
     /**
      * Constantly ping websocket so that we do not get a timeout
      */
+    function noop() {}
     const ping = function() {
         socket.ping(noop);
     }
