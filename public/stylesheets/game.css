@@ -1,5 +1,20 @@
 @import url("main.css");
 
+#logo {
+    display: inline-block;
+    height: 40px;
+    margin-top: -20px;
+    margin-right: -10px;
+    padding-left: 28px;
+}
+
+#logoSpan {
+    display: inline-block;
+    font-size: 1.4em;
+    vertical-align: top;
+    margin-top: -9px;
+}
+
 .timer {
     height: 50px;
     width: 250px;
@@ -220,6 +235,8 @@
     text-align: left;
     padding-left: 30px; 
     font-size: 3em;
+
+    margin-bottom: 0;
 }
 
 #forfeitAsk {
