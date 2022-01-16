@@ -16,5 +16,5 @@
  */
 
 (function (exports) {
-  exports.WEB_SOCKET_URL = "ws://hexagonchess.herokuapp.com" /*+ (process.env.PORT || 5000)*/; /* WebSocket URL */
+  exports.WEB_SOCKET_URL = location.origin.replace(/^http/, 'ws')
 })(typeof exports === "undefined" ? (this.Setup = {}) : exports);
