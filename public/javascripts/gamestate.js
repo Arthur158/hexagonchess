@@ -236,8 +236,8 @@ class GameState {
     constructor(){
         this.gameBoard = new GameBoard();
         this.gameBoard.initializeGlinski();
-        this.whiteTimer = 180000;
-        this.blackTimer = 180000;
+        this.whiteTimer = 600000;
+        this.blackTimer = 600000;
         this.lastUpdated = (new Date()).getTime();
         this.turn = 0;
         this.losses = {
