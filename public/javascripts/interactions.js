@@ -209,10 +209,9 @@ class GameHandler {
         if (!socket) return;
         if (socket.readyState !== 1) return;
         socket.send("heartbeat");
-        setTimeout(heartbeat, 2000);
+        setTimeout(heartbeat, 15000);
     }
 
-    heartbeat();
     
     /*
    * initialize all UI elements of the game:
@@ -253,6 +252,8 @@ class GameHandler {
 			if (gh.getPlayerType() == PlayerType.BLACK) {
 				// maybe invert board, dunno?
 			}
+
+            heartbeat();
         }
 
 		// When we get new data from the server we override the existent game state

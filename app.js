@@ -108,11 +108,16 @@ wss.on("connection", function connection(ws) {
    *  3. send the message to OP
    */
   con.on("message", function incoming(message) {
-    const oMsg = JSON.parse(message.toString());
-
     const gameObj = websockets[con["id"]];
     const gameObjData = gameObj.gameData;
     const isPlayerWhite = gameObj.playerWhite == con ? 1 : 0;
+    
+    if(message.toString() == "heartbeat") {
+      console.log(`[GAME ${gameObj.id}][DEBUG] Heartbeat from ${con["id"]}`);
+      return;
+    }
+
+    const oMsg = JSON.parse(message.toString());
 
     if(oMsg.type == messages.T_RESIGNED){
       if(oMsg.data == PlayerType.WHITE){
