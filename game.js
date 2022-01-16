@@ -130,8 +130,8 @@ class game {
         let finalMsg = messages.O_GAME_OVER;
         finalMsg.data = color;
 
-        if(this.playerWhite != null) this.playerWhite.send(JSON.stringify(finalMsg));
-        if(this.playerBlack != null) this.playerBlack.send(JSON.stringify(finalMsg));
+        if(this.playerWhite != null && this.playerWhite.readyState === 1) this.playerWhite.send(JSON.stringify(finalMsg));
+        if(this.playerBlack != null && this.playerBlack.readyState === 1) this.playerBlack.send(JSON.stringify(finalMsg));
 
         this.setStatus(finalMsg.data);
 
@@ -147,8 +147,8 @@ class game {
      * Sends a stalemate message to both players
      */
     sendStalemateMessage() {
-        if(this.playerWhite != null) this.playerWhite.send(messages.S_STALEMATE);
-        if(this.playerBlack != null) this.playerBlack.send(messages.S_STALEMATE);
+        if(this.playerWhite != null && this.playerWhite.readyState === 1) this.playerWhite.send(messages.S_STALEMATE);
+        if(this.playerBlack != null && this.playerBlack.readyState === 1) this.playerBlack.send(messages.S_STALEMATE);
 
         this.setStatus("STALEMATE");
 
@@ -162,8 +162,8 @@ class game {
         let update = messages.O_GAME_DATA;
         update.data = JSON.stringify(this.gameData);
 
-        if(this.playerWhite != null) this.playerWhite.send(JSON.stringify(update));
-        if(this.playerBlack != null) this.playerBlack.send(JSON.stringify(update));
+        if(this.playerWhite != null && this.playerWhite.readyState === 1) this.playerWhite.send(JSON.stringify(update));
+        if(this.playerBlack != null && this.playerBlack.readyState === 1) this.playerBlack.send(JSON.stringify(update));
     }
 
     closeConnections() {
