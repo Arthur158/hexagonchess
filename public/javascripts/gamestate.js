@@ -214,7 +214,12 @@ class GameBoard {
 
         // now the fun part
         for(let i = 0; i < Math.abs(position.z); i++) {
-            level += (file > 5 ? 1 : 0) * Math.sign(position.z);
+            if(position.z < 0) {
+                level += (file >= 5 ? -1 : 0);
+            }
+            else {
+                level += (file > 5 ? 1 : 0);
+            }
             file += -Math.sign(position.z);
         }
 
