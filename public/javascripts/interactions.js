@@ -202,6 +202,15 @@ class GameHandler {
 (function setup() {
     const socket = new WebSocket(Setup.WEB_SOCKET_URL);
 
+    /**
+     * Constantly ping websocket so that we do not get a timeout
+     */
+    const ping = function() {
+        socket.ping(noop);
+    }
+    
+    setInterval(ping, 30000);
+
     /*
    * initialize all UI elements of the game:
    * - visible game board (i.e the actual hexagons that represent the board)
