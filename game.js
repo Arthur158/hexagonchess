@@ -108,16 +108,16 @@ class game {
             if(ref == null || ref.playerWhite == null || ref.playerBlack == null) {
                 clearInterval(intv);
                 return;
-              }
-        
-              ref.gameData.updateTimer(ref.gameData.getCurrentPlayer());
-              let expiredTimer = ref.gameData.getExpiredTimer();
-        
-              if(expiredTimer != null) {
+            }
+    
+            ref.gameData.updateTimer(ref.gameData.getCurrentPlayer());
+            let expiredTimer = ref.gameData.getExpiredTimer();
+    
+            if(expiredTimer != null) {
                 hook(ref, expiredTimer);
         
                 clearInterval(intv);
-              }
+            }
         }, 500);
     }
 

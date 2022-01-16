@@ -93,6 +93,8 @@ wss.on("connection", function connection(ws) {
 
     // Constantly check if a player ran out of time
     currentGame.startTimeChecker(function(/** @type {Game} */ ref, /** @type {string} */ expiredTimer) {
+      console.log(`[GAME ${ref.id}] Timer expired ${expiredTimer}`);
+
       ref.sendWinMessage(expiredTimer == PlayerType.WHITE ? PlayerType.BLACK : PlayerType.WHITE);
     });
 

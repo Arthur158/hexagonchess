@@ -286,14 +286,14 @@ class GameState {
         
         let elapsedTime = nowTime - this.lastUpdated;
 
+        this.lastUpdated = (new Date()).getTime();
+
         if(color == "WHITE") {
             this.whiteTimer -= elapsedTime;
         }
         else {
             this.blackTimer -= elapsedTime;
         }
-
-        this.lastUpdated = (new Date()).getTime();
     }
 
     /**
